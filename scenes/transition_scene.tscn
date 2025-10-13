@@ -1,0 +1,47 @@
+[gd_scene load_steps=4 format=3 uid="uid://cxqewboube3u3"]
+
+[ext_resource type="Script" uid="uid://bmupsta8sfquc" path="res://scripts/transition_scene.gd" id="1_aigh2"]
+[ext_resource type="FontFile" uid="uid://cbi6qc2w2chwv" path="res://assets/fonts/Pixellari.ttf" id="2_cqi5c"]
+[ext_resource type="AudioStream" uid="uid://bk68cbwc7t2yf" path="res://assets/sfx/type.wav" id="2_vydtp"]
+
+[node name="TransitionScene" type="Node2D"]
+script = ExtResource("1_aigh2")
+
+[node name="Type" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("2_vydtp")
+pitch_scale = 0.7
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -49.0
+offset_right = 1997.0
+offset_bottom = 1118.0
+color = Color(0, 0, 0, 1)
+
+[node name="Message" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 133.0
+offset_top = 746.0
+offset_right = 1035.0
+offset_bottom = 1057.0
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = ExtResource("2_cqi5c")
+theme_override_font_sizes/font_size = 86
+vertical_alignment = 2
+
+[node name="Arrow" type="Label" parent="."]
+offset_left = 60.0
+offset_top = 746.0
+offset_right = 962.0
+offset_bottom = 1057.0
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = ExtResource("2_cqi5c")
+theme_override_font_sizes/font_size = 86
+text = ">"
+vertical_alignment = 2
+
+[node name="CursorBlinkTimer" type="Timer" parent="."]
+wait_time = 0.2
+autostart = true
+
+[connection signal="timeout" from="CursorBlinkTimer" to="." method="_on_cursor_blink_timer_timeout"]

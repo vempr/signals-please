@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://dv5o0yn2j6xht"]
 
 [ext_resource type="Script" uid="uid://dmln134mf8nbr" path="res://scripts/main_menu.gd" id="1_l6cm7"]
-[ext_resource type="Texture2D" uid="uid://c0hlw0e2d107l" path="res://assets/bg.png" id="2_ekxnf"]
-[ext_resource type="FontFile" uid="uid://bar55wglxrc3e" path="res://assets/Pixeled.ttf" id="3_bqqt6"]
-[ext_resource type="FontFile" uid="uid://cbi6qc2w2chwv" path="res://assets/Pixellari.ttf" id="4_wu84c"]
+[ext_resource type="Texture2D" uid="uid://c0hlw0e2d107l" path="res://assets/images/bg.png" id="2_ekxnf"]
+[ext_resource type="FontFile" uid="uid://bar55wglxrc3e" path="res://assets/fonts/Pixeled.ttf" id="3_bqqt6"]
+[ext_resource type="FontFile" uid="uid://cbi6qc2w2chwv" path="res://assets/fonts/Pixellari.ttf" id="4_wu84c"]
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_l6cm7")
@@ -42,17 +42,16 @@ autowrap_mode = 2
 [node name="PlayButton" type="Button" parent="."]
 offset_left = 49.0
 offset_top = 193.0
-offset_right = 852.0
+offset_right = 871.0
 offset_bottom = 359.0
 theme_override_fonts/font = ExtResource("3_bqqt6")
-theme_override_font_sizes/font_size = 56
-text = "PLAY THE GAME"
+theme_override_font_sizes/font_size = 21
+text = "BIG BUTTON THAT WANTS YOU TO CLICK (PLAY)"
 autowrap_mode = 2
 
 [node name="BGContainer" type="ColorRect" parent="."]
 unique_name_in_owner = true
 z_index = -1
-anchors_preset = -1
 offset_left = 954.0
 offset_top = 25.0
 offset_right = 1443.0
