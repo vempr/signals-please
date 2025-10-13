@@ -1,0 +1,70 @@
+[gd_scene load_steps=5 format=3 uid="uid://dv5o0yn2j6xht"]
+
+[ext_resource type="Script" uid="uid://dmln134mf8nbr" path="res://scripts/main_menu.gd" id="1_l6cm7"]
+[ext_resource type="Texture2D" uid="uid://c0hlw0e2d107l" path="res://assets/bg.png" id="2_ekxnf"]
+[ext_resource type="FontFile" uid="uid://bar55wglxrc3e" path="res://assets/Pixeled.ttf" id="3_bqqt6"]
+[ext_resource type="FontFile" uid="uid://cbi6qc2w2chwv" path="res://assets/Pixellari.ttf" id="4_wu84c"]
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_l6cm7")
+
+[node name="BlackBackground" type="ColorRect" parent="."]
+z_index = -3
+offset_right = 1184.0
+offset_bottom = 699.0
+scale = Vector2(1.67, 1.67)
+color = Color(0.0383972, 0.0383972, 0.0383972, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Title" type="Label" parent="."]
+offset_left = 50.0
+offset_top = -7.0
+offset_right = 868.0
+offset_bottom = 179.0
+theme_override_fonts/font = ExtResource("3_bqqt6")
+theme_override_font_sizes/font_size = 66
+text = "Signals, Please!"
+
+[node name="Description" type="Label" parent="."]
+offset_left = 56.0
+offset_top = 402.0
+offset_right = 875.0
+offset_bottom = 2016.0
+theme_override_fonts/font = ExtResource("4_wu84c")
+theme_override_font_sizes/font_size = 40
+text = "You are the appointed leader of an isolated region: the last functioning outpost after the network collapse.
+
+All external contact comes through your Signal Terminal, an old communications system used to vet incoming refugees, traders, and foreign officials. You decide who to let through the border.
+
+Your resources are limited: rations, security, morale. You can survive hunger longer than your people, but your reputation determines whether they continue to follow you."
+autowrap_mode = 2
+
+[node name="PlayButton" type="Button" parent="."]
+offset_left = 49.0
+offset_top = 193.0
+offset_right = 852.0
+offset_bottom = 359.0
+theme_override_fonts/font = ExtResource("3_bqqt6")
+theme_override_font_sizes/font_size = 56
+text = "PLAY THE GAME"
+autowrap_mode = 2
+
+[node name="BGContainer" type="ColorRect" parent="."]
+unique_name_in_owner = true
+z_index = -1
+anchors_preset = -1
+offset_left = 954.0
+offset_top = 25.0
+offset_right = 1443.0
+offset_bottom = 300.0
+scale = Vector2(1.94, 1.94)
+color = Color(0.0392157, 0.0392157, 0.0392157, 0.619608)
+metadata/_edit_group_ = true
+
+[node name="BG" type="Sprite2D" parent="BGContainer"]
+z_index = -2
+position = Vector2(242.784, 136.598)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_ekxnf")
+
+[connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
