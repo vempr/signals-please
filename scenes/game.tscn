@@ -1,10 +1,137 @@
-[gd_scene load_steps=2 format=3 uid="uid://6n1jus564k5r"]
+[gd_scene load_steps=11 format=3 uid="uid://6n1jus564k5r"]
 
+[ext_resource type="Script" uid="uid://ds3swgv6c3agv" path="res://scenes/game.gd" id="1_iywne"]
+[ext_resource type="PackedScene" uid="uid://ya74x22r2oq" path="res://scenes/hover_message.tscn" id="1_lnu2h"]
 [ext_resource type="Texture2D" uid="uid://c0hlw0e2d107l" path="res://assets/images/bg.png" id="1_uwrxv"]
+[ext_resource type="Script" uid="uid://b1f27bwcpxp5q" path="res://scripts/hover.gd" id="1_yqjtg"]
+[ext_resource type="AudioStream" uid="uid://b2cj4fxkshutk" path="res://assets/sfx/eat.wav" id="4_lbhrr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iywne"]
+size = Vector2(423, 150)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p57ef"]
+size = Vector2(22.0933, 7.05781)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u5sy4"]
+size = Vector2(62.6667, 36)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gee14"]
+size = Vector2(126.667, 105.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0tnpc"]
+size = Vector2(105.5, 13.8333)
 
 [node name="Game" type="Node2D"]
+script = ExtResource("1_iywne")
+
+[node name="HoverMessage" parent="." instance=ExtResource("1_lnu2h")]
+unique_name_in_owner = true
+
+[node name="Hover" type="Node2D" parent="."]
+position = Vector2(960, 540)
+scale = Vector2(6, 6)
+script = ExtResource("1_yqjtg")
+
+[node name="Lines" type="Node2D" parent="Hover"]
+position = Vector2(-160, -90)
+scale = Vector2(0.166667, 0.166667)
+
+[node name="FridgeLine" type="Line2D" parent="Hover/Lines"]
+unique_name_in_owner = true
+z_index = -1
+points = PackedVector2Array(257, 165, 399, 290, 400, 791, 176, 990, 28, 908, 25, 255)
+closed = true
+default_color = Color(0, 1, 0, 1)
+
+[node name="WindowLine" type="Line2D" parent="Hover/Lines"]
+unique_name_in_owner = true
+z_index = -1
+points = PackedVector2Array(650.999, 53.9999, 1271, 53.9999, 1165, 195, 753.998, 195)
+closed = true
+default_color = Color(0, 1, 0, 1)
+
+[node name="ComputerLine" type="Line2D" parent="Hover/Lines"]
+unique_name_in_owner = true
+points = PackedVector2Array(777.998, 329.999, 1144, 330.999, 1144, 535.999, 777.998, 535.999)
+closed = true
+default_color = Color(0, 1, 0, 1)
+
+[node name="BedLine" type="Line2D" parent="Hover/Lines"]
+unique_name_in_owner = true
+points = PackedVector2Array(1508, 1102, 1410, 1061, 1439, 644.999, 1428, 622.999, 1421, 599.999, 1428, 576.999, 1438, 558.999, 1460, 549.999, 1475, 548.999, 1492, 552.999, 1509, 558.999, 1523, 572.999, 1529, 583.999, 1945, 521.999, 1989, 1122, 1633, 1106, 1519, 947.998, 1501, 1097)
+closed = true
+default_color = Color(0, 1, 0, 1)
+
+[node name="Areas" type="Node2D" parent="Hover"]
+z_index = -1
+
+[node name="FridgeHoverArea" type="Area2D" parent="Hover/Areas"]
+z_index = -5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hover/Areas/FridgeHoverArea"]
+polygon = PackedVector2Array(-117.5, -62.6667, -93.3333, -41.1667, -92.6667, 42, -129.333, 75.8333, -156.167, 62.8333, -155.667, -47.3333)
+
+[node name="WindowHoverArea" type="Area2D" parent="Hover/Areas"]
+z_index = -5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hover/Areas/WindowHoverArea"]
+position = Vector2(0.0833435, -69.1667)
+scale = Vector2(0.166667, 0.166667)
+shape = SubResource("RectangleShape2D_iywne")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Hover/Areas/WindowHoverArea"]
+position = Vector2(42.428, -78.8161)
+rotation = 0.647379
+scale = Vector2(0.662638, 6.03738)
+shape = SubResource("RectangleShape2D_p57ef")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Hover/Areas/WindowHoverArea"]
+position = Vector2(-42.1667, -78.816)
+rotation = -0.647517
+scale = Vector2(0.662638, 6.03738)
+shape = SubResource("RectangleShape2D_p57ef")
+
+[node name="ComputerHoverArea" type="Area2D" parent="Hover/Areas"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hover/Areas/ComputerHoverArea"]
+position = Vector2(0.166672, -17.8333)
+shape = SubResource("RectangleShape2D_u5sy4")
+
+[node name="BedHoverArea" type="Area2D" parent="Hover/Areas"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hover/Areas/BedHoverArea"]
+position = Vector2(140.667, 53.9167)
+shape = SubResource("RectangleShape2D_gee14")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Hover/Areas/BedHoverArea"]
+position = Vector2(139.667, 7.5)
+rotation = -0.164483
+shape = SubResource("RectangleShape2D_0tnpc")
 
 [node name="BG" type="Sprite2D" parent="."]
+z_index = -10
 position = Vector2(960, 540)
 scale = Vector2(6, 6)
 texture = ExtResource("1_uwrxv")
+
+[node name="SFX" type="Node" parent="."]
+
+[node name="Eat" type="AudioStreamPlayer" parent="SFX"]
+unique_name_in_owner = true
+stream = ExtResource("4_lbhrr")
+volume_db = -5.0
+pitch_scale = 0.9
+
+[connection signal="display_message" from="Hover" to="HoverMessage" method="_on_hover_display_message"]
+[connection signal="hide_message" from="Hover" to="HoverMessage" method="_on_hover_hide_message"]
+[connection signal="progress" from="Hover" to="." method="_on_hover_progress"]
+[connection signal="input_event" from="Hover/Areas/FridgeHoverArea" to="Hover" method="_on_fridge_hover_area_input_event"]
+[connection signal="mouse_entered" from="Hover/Areas/FridgeHoverArea" to="Hover" method="_on_fridge_hover_area_mouse_entered"]
+[connection signal="mouse_exited" from="Hover/Areas/FridgeHoverArea" to="Hover" method="_on_fridge_hover_area_mouse_exited"]
+[connection signal="mouse_entered" from="Hover/Areas/WindowHoverArea" to="Hover" method="_on_window_hover_area_mouse_entered"]
+[connection signal="input_event" from="Hover/Areas/ComputerHoverArea" to="Hover" method="_on_computer_hover_area_input_event"]
+[connection signal="mouse_entered" from="Hover/Areas/ComputerHoverArea" to="Hover" method="_on_computer_hover_area_mouse_entered"]
+[connection signal="mouse_exited" from="Hover/Areas/ComputerHoverArea" to="Hover" method="_on_computer_hover_area_mouse_exited"]
+[connection signal="input_event" from="Hover/Areas/BedHoverArea" to="Hover" method="_on_bed_hover_area_input_event"]
+[connection signal="mouse_entered" from="Hover/Areas/BedHoverArea" to="Hover" method="_on_bed_hover_area_mouse_entered"]
+[connection signal="mouse_exited" from="Hover/Areas/BedHoverArea" to="Hover" method="_on_bed_hover_area_mouse_exited"]

@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://ya74x22r2oq"]
+
+[ext_resource type="Script" uid="uid://jdbmv8dehmq5" path="res://scripts/hover_message.gd" id="1_he805"]
+[ext_resource type="FontFile" uid="uid://cbi6qc2w2chwv" path="res://assets/fonts/Pixellari.ttf" id="1_skppa"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_he805"]
+bg_color = Color(0, 0, 0, 0.662745)
+
+[node name="HoverMessage" type="Panel"]
+offset_left = -166.0
+offset_top = -124.0
+offset_right = 166.0
+offset_bottom = -25.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_he805")
+script = ExtResource("1_he805")
+metadata/_edit_group_ = true
+
+[node name="Message" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 19.0
+offset_top = 11.0
+offset_right = 316.0
+offset_bottom = 87.0
+theme_override_fonts/font = ExtResource("1_skppa")
+theme_override_font_sizes/font_size = 20
+text = "This is a message!"
+autowrap_mode = 2
