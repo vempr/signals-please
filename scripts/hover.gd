@@ -25,7 +25,7 @@ func cursor_normal() -> void:
 
 
 func emit_hunger() -> void:
-	display_message.emit("You are at " + str(snapped(GAME_STATE.player.hunger, 0.1) * 100) +  "% hunger. Do you wish to eat? (-10% hunger)")
+	display_message.emit("You are at " + str(GAME_STATE.player.hunger) + "% hunger. Do you wish to eat? (-10% hunger)")
 
 
 func emit_full() -> void:
@@ -57,7 +57,7 @@ func _on_fridge_hover_area_mouse_exited() -> void:
 
 
 func _on_fridge_hover_area_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
-	if Input.is_action_just_pressed("click") && GAME_STATE.player.hunger > 0.0:
+	if Input.is_action_pressed("click") && GAME_STATE.player.hunger > 0.0:
 		%Eat.play()
 		GAME_STATE.player.hunger -= C.DECREASE_AFTER_EATING
 		
@@ -105,7 +105,7 @@ func _on_bed_hover_area_mouse_exited() -> void:
 
 
 func _on_computer_hover_area_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
-	if Input.is_action_just_pressed("click") && GAME_STATE.day_finished == false:
+	if Input.is_action_pressed("click") && GAME_STATE.day_finished == false:
 		# GAME_STATE.day_finished = true
 		# %BedLine.modulate.a = 0.2
 		trigger_computer.emit()

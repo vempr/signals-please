@@ -5,7 +5,7 @@ func _ready() -> void:
 	visible = false
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	align()
 
 

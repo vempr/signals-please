@@ -64,6 +64,12 @@ theme_override_font_sizes/italics_font_size = 35
 theme_override_font_sizes/normal_font_size = 35
 theme_override_font_sizes/bold_font_size = 35
 bbcode_enabled = true
+text = "Type \"boot\" to start SIG, the station's AI supervisor. Press ESC to exit the terminal.
+"
 vertical_alignment = 2
+
+[node name="TypingTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+one_shot = true
 
 [connection signal="text_submitted" from="PlayerInput" to="." method="_on_player_input_text_submitted"]
