@@ -3,6 +3,7 @@ extends Node2D
 signal display_message(message: String)
 signal hide_message
 signal progress
+signal trigger_computer
 
 var visible_message = null
 var seen_window := false
@@ -105,11 +106,12 @@ func _on_bed_hover_area_mouse_exited() -> void:
 
 func _on_computer_hover_area_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
 	if Input.is_action_just_pressed("click") && GAME_STATE.day_finished == false:
-		GAME_STATE.day_finished = true
-		%BedLine.modulate.a = 0.2
+		# GAME_STATE.day_finished = true
+		# %BedLine.modulate.a = 0.2
+		trigger_computer.emit()
 
 
 func _on_bed_hover_area_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
 	if Input.is_action_just_pressed("click") && GAME_STATE.day_finished == true:
-		process_mode = Node.PROCESS_MODE_DISABLED
 		progress.emit()
+		process_mode = Node.PROCESS_MODE_DISABLED
