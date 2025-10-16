@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://ca1qwxe2wemin"]
+[gd_scene load_steps=6 format=3 uid="uid://ca1qwxe2wemin"]
 
 [ext_resource type="Script" uid="uid://bc4pu2rtu8n1w" path="res://scripts/terminal.gd" id="1_m430i"]
 [ext_resource type="FontFile" uid="uid://cbi6qc2w2chwv" path="res://assets/fonts/Pixellari.ttf" id="2_sy66w"]
@@ -8,6 +8,11 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vs6ym"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="FontVariation" id="FontVariation_sy66w"]
+base_font = ExtResource("2_sy66w")
+variation_embolden = 0.5
+spacing_glyph = 2
 
 [node name="Terminal" type="Node2D"]
 script = ExtResource("1_m430i")
@@ -56,9 +61,7 @@ offset_top = -967.0
 offset_right = 1896.0
 offset_bottom = 995.0
 theme_override_fonts/normal_font = ExtResource("2_sy66w")
-theme_override_fonts/italics_font = ExtResource("2_sy66w")
-theme_override_fonts/bold_italics_font = ExtResource("2_sy66w")
-theme_override_fonts/bold_font = ExtResource("2_sy66w")
+theme_override_fonts/bold_font = SubResource("FontVariation_sy66w")
 theme_override_font_sizes/bold_italics_font_size = 35
 theme_override_font_sizes/italics_font_size = 35
 theme_override_font_sizes/normal_font_size = 35
