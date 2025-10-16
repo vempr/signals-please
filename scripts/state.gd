@@ -1,13 +1,15 @@
 extends Node
 
 
+var FINAL_DAY := 30
 var day := 1
 var day_finished := false
 @onready var player = {
 	"hunger": randi_range(1, 10) + 20,
 	"reputation": randi_range(1, 10) + 40,
-	"ration_remaining": randi_range(3, 5),
 }
+var ration_remaining: float = snapped(randi_range(5, 7) + randf(), 0.1)
+var people_remaining := 15
 
 
 func get_reputation_status() -> String:

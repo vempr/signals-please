@@ -1,7 +1,9 @@
 extends Node2D
 
 enum DIFFICULTY { EASY, MEDIUM, HARD }
+const MAX_TERMINAL_LINES := 30
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const OPTIONS: Array[String] = ["a", "b", "c"]
 
 @onready var label := %PlayerInput
 @onready var timer := %TypingTimer
@@ -9,7 +11,8 @@ const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 var underscore_visible := true
 var booted := false
 var can_submit := true
-var signal_is_incoming := false
+var incoming_signal_next := false
+var respond_to_signal := false
 var DEBUG := false
 var current_signal = null
 var difficulty
@@ -18,7 +21,7 @@ var difficulty
 func _ready() -> void:
 	label.text = ""
 	label.grab_focus()
-	DEBUG = true
+	DEBUG = false
 
 
 func _on_player_input_text_submitted(new_text: String) -> void:
@@ -32,21 +35,23 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 	terminal_text.text += "[color=green]> " + new_text + "[/color]" + "\n"
 	
 	if !booted:
-		if new_text.strip_edges().to_lower() != "boot":
+		if !validate_input(new_text, ["boot"]):
 			terminal_text.text += "[color=red]'" + new_text + "' is not a known command. Please try again.[/color]" + "\n"
 			return
 		
 		can_submit = false
 		booted = true
 		
-		var m = "[b]
--- BOOT SEQUENCE --
-CONNECTION: STABLE (" + str(snapped(randf() * 2 + 3, 0.01)) + "KB/S)
-AUTHORIZED USER: [LEADER_ID_01]
-STATUS: PROVISIONAL COMMAND ACTIVE
-REPUTATION INDEX: " + str(GAME_STATE.player.reputation) + "% (TRUST: " + GAME_STATE.get_reputation_status() + ")
-RATION DISTRIBUTION: " + str(GAME_STATE.player.ration_remaining) + " DAYS REMAINING
-[/b]"
+		var m = "[b]"
+		m += "\n-- BOOT SEQUENCE --"
+		m += "\nCONNECTION: STABLE (" + str(snapped(randf() * 2 + 3, 0.01)) + "KB/S)"
+		m += "\nAUTHORIZED USER: [LEADER_ID_01]"
+		m += "\nSTATUS: PROVISIONAL COMMAND ACTIVE"
+		m += "\nREPUTATION INDEX: " + str(GAME_STATE.player.reputation) + "% (TRUST: " + GAME_STATE.get_reputation_status() + ")"
+		m += "\nRATION DISTRIBUTION: " + str(GAME_STATE.ration_remaining) + " DAYS REMAINING"
+		m += "\nPOPULATION: " + str(GAME_STATE.people_remaining) + " PEOPLE REMAINING"
+		m += "\nN.A.L ALLIES ARRIVAL: " + str(GAME_STATE.FINAL_DAY - GAME_STATE.day) + " DAYS LEFT"
+		m += "\n[/b]"
 		await print_text(m, C.COLORS.blue)
 
 		for message in C.MESSAGES.SIG.introduction:
@@ -54,26 +59,50 @@ RATION DISTRIBUTION: " + str(GAME_STATE.player.ration_remaining) + " DAYS REMAIN
 			await print_text(message, C.COLORS.orange, 0.02, true)
 		
 		await wait(1.5)
-		await print_text(C.MESSAGES.incoming_signal, C.COLORS.blue, 0.005, true)
+		await print_text(C.MESSAGES.incoming_signal, C.COLORS.blue)
 		
 		can_submit = true
-		signal_is_incoming = true
+		incoming_signal_next = true
 		return
 	
 	
-	if signal_is_incoming && new_text.strip_edges().to_lower() == "r":
+	if incoming_signal_next:
+		if !validate_input(new_text, ["r"]):
+			terminal_text.text += "[color=red]'" + new_text + "' is not a known command. Please try again.[/color]" + "\n"
+			return
+			
 		nl()
 		can_submit = false
-		signal_is_incoming = false
+		incoming_signal_next = false
+		respond_to_signal = true
 		
 		generate_real_signal()
 		await print_text(get_prepared_signal(), "white", 0.03, true)
 		await wait(0.3)
 		
 		nl()
-		for letter in ["a", "b", "c"]:
+		for letter in OPTIONS:
 			var m = "[b]" + letter + "[/b]: " + current_signal.data[letter].decision
 			await print_text(m, C.COLORS.blue)
+		nl()
+		
+		can_submit = true
+		return
+	
+	
+	if respond_to_signal:
+		var option = new_text.strip_edges().to_lower()
+		if !validate_input(option, OPTIONS):
+			terminal_text.text += "[color=red]'" + new_text + "' is not an option. Please try again.[/color]" + "\n"
+			return
+		
+		can_submit = false
+		respond_to_signal = false
+		
+		nl()
+		for message in current_signal.data[option].reaction:
+			await print_text(message, C.COLORS.blue, 0.005, true)
+		nl()
 
 
 func print_text(text: String, color: String = "white", speed: float = 0.005, take_breaks: bool = false) -> bool:
@@ -89,7 +118,7 @@ func print_text(text: String, color: String = "white", speed: float = 0.005, tak
 		
 		if take_breaks && letter == ".":
 			timer.start(0.3)
-		elif take_breaks && letter == ",":
+		elif take_breaks && [",", "-", ";"].find(letter) > -1:
 			timer.start(0.1)
 		else:
 			timer.start(speed)
@@ -97,6 +126,13 @@ func print_text(text: String, color: String = "white", speed: float = 0.005, tak
 
 	terminal_text.text += "[/color]\n"
 	return true
+
+
+func validate_input(s: String, strings: Array[String]) -> bool:
+	if strings.find(s.strip_edges().to_lower()) > -1:
+		return true
+	else:
+		return false
 
 
 func wait(time: float = 0.5) -> bool:
@@ -147,15 +183,18 @@ func get_prepared_signal() -> String:
 	var id := generate_id()
 	var signal_integrity := generate_signal_integrity()
 	
-	return request + "
-ID: " + id + "
-SECURITY CLEARANCE: Pending
-SIGNAL INTEGRITY: "+ signal_integrity +"
-MESSAGE: " + current_signal.data.message_content
+	var full_signal := ""
+	full_signal += request
+	full_signal += "\nID: " + id
+	full_signal += "\nSECURITY CLEARANCE: Pending"
+	full_signal += "\nSIGNAL INTEGRITY: " + signal_integrity
+	full_signal += "\nMESSAGE: " + current_signal.data.message_content
+
+	return full_signal
 
 
 func generate_id() -> String:
-	var id_prefix: String
+	var id_prefix := ""
 	for i in randi_range(1, 4):
 		id_prefix += ALPHABET[randi_range(0, ALPHABET.length() - 1)]
 	
@@ -170,7 +209,7 @@ func generate_id() -> String:
 		DIFFICULTY.MEDIUM:
 			var i = randi_range(0, 2)
 			var part_to_corrupt = parts[i]
-			part_to_corrupt[randi_range(1, part_to_corrupt.length())] = "_"
+			part_to_corrupt[randi_range(0, part_to_corrupt.length() - 1)] = "_"
 			parts[i] = part_to_corrupt
 			
 		DIFFICULTY.HARD:
@@ -200,3 +239,11 @@ func generate_signal_integrity() -> String:
 			p = snapped(randi_range(0, 99) + randf(), 0.1)
 
 	return str(p) + "%"
+
+
+func _on_memory_timer_timeout() -> void:
+	var terminal_lines = terminal_text.text.split("\n")
+
+	if terminal_lines.size() > MAX_TERMINAL_LINES:
+		terminal_lines = terminal_lines.slice(terminal_lines.size() - MAX_TERMINAL_LINES, terminal_lines.size())
+		terminal_text.text = "\n".join(terminal_lines)

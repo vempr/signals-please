@@ -57,7 +57,7 @@ caret_force_displayed = true
 [node name="Text" type="RichTextLabel" parent="."]
 unique_name_in_owner = true
 offset_left = 33.0
-offset_top = -967.0
+offset_top = -25776.0
 offset_right = 1896.0
 offset_bottom = 995.0
 theme_override_fonts/normal_font = ExtResource("2_sy66w")
@@ -75,4 +75,9 @@ vertical_alignment = 2
 unique_name_in_owner = true
 one_shot = true
 
+[node name="MemoryTimer" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
 [connection signal="text_submitted" from="PlayerInput" to="." method="_on_player_input_text_submitted"]
+[connection signal="timeout" from="MemoryTimer" to="." method="_on_memory_timer_timeout"]

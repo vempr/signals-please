@@ -59,7 +59,9 @@ func _on_fridge_hover_area_mouse_exited() -> void:
 func _on_fridge_hover_area_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
 	if Input.is_action_pressed("click") && GAME_STATE.player.hunger > 0.0:
 		%Eat.play()
+		
 		GAME_STATE.player.hunger -= C.DECREASE_AFTER_EATING
+		GAME_STATE.ration_remaining -= C.DECREASE_AFTER_EATING / 100.0
 		
 		if GAME_STATE.player.hunger <= 0.0:
 			emit_full()
