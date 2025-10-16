@@ -1,7 +1,7 @@
 extends Node2D
 
 enum DIFFICULTY { EASY, MEDIUM, HARD }
-const MAX_TERMINAL_LINES := 30
+const MAX_TERMINAL_LINES := 50
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 const OPTIONS: Array[String] = ["a", "b", "c"]
 
@@ -21,7 +21,7 @@ var difficulty
 func _ready() -> void:
 	label.text = ""
 	label.grab_focus()
-	DEBUG = false
+	DEBUG = true
 
 
 func _on_player_input_text_submitted(new_text: String) -> void:
@@ -80,6 +80,9 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 		await print_text(get_prepared_signal(), "white", 0.03, true)
 		await wait(0.3)
 		
+		if DEBUG:
+			print_text(str(current_signal.is_real))
+		
 		nl()
 		for letter in OPTIONS:
 			var m = "[b]" + letter + "[/b]: " + current_signal.data[letter].decision
@@ -103,6 +106,19 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 		for message in current_signal.data[option].reaction:
 			await print_text(message, C.COLORS.blue, 0.005, true)
 		nl()
+		
+		await ddd()
+		nl()
+		nl()
+		await assess_and_display(option)
+		nl()
+		await ddd()
+		await ddd()
+		nl()
+		await print_text(C.MESSAGES.incoming_signal, C.COLORS.blue)
+		
+		can_submit = true
+		incoming_signal_next = true
 
 
 func print_text(text: String, color: String = "white", speed: float = 0.005, take_breaks: bool = false) -> bool:
@@ -147,11 +163,22 @@ func _on_computer_in_computer() -> void:
 
 
 func generate_real_signal() -> void:
-	current_signal = {
-		"data": C.MESSAGES.real[C.MESSAGE_TYPE.NEED_FOOD][0],
-		"type": C.MESSAGE_TYPE.NEED_FOOD,
-		"is_real": true,
-	}
+	var types =  C.MESSAGE_TYPE.values()
+	var rand_type = types[randi_range(0, types.size() - 1)]
+	var is_real = randi_range(0, 1)
+	
+	if is_real:
+		current_signal = {
+			"data": C.MESSAGES.real[rand_type][randi_range(0, 1)],
+			"type": rand_type,
+			"is_real": true,
+		}
+	else:
+		current_signal = {
+			"data": C.MESSAGES.fake[rand_type][randi_range(0, 1)],
+			"type": rand_type,
+			"is_real": false,
+		}
 
 func nl() -> void:
 	terminal_text.text += "\n"
@@ -199,7 +226,8 @@ func generate_id() -> String:
 		id_prefix += ALPHABET[randi_range(0, ALPHABET.length() - 1)]
 	
 	var id_number := str(randi_range(1, 9999))
-	var id_suffix: String
+	
+	var id_suffix := ""
 	for i in randi_range(1, 3):
 		id_suffix += ALPHABET[randi_range(0, ALPHABET.length() - 1)]
 	
@@ -247,3 +275,96 @@ func _on_memory_timer_timeout() -> void:
 	if terminal_lines.size() > MAX_TERMINAL_LINES:
 		terminal_lines = terminal_lines.slice(terminal_lines.size() - MAX_TERMINAL_LINES, terminal_lines.size())
 		terminal_text.text = "\n".join(terminal_lines)
+
+
+func ddd() -> bool:
+	terminal_text.text += "[color=00ff00]"
+	
+	for i in range(3):
+		terminal_text.text += "."
+		timer.start(0.6)
+		await timer.timeout
+	
+	terminal_text.text += "[/color]"
+	return true
+
+
+func assess_and_display(opt: String) -> bool:
+	if opt == "c":
+		var reputation_deduction := randi_range(1, 2)
+		GAME_STATE.player.reputation -= reputation_deduction
+		await print_text("- "+ str(reputation_deduction) +"% REPUTATION", C.COLORS.orange, 0.01)
+		return true
+	
+	if current_signal.is_real:
+		match opt:
+			"a":
+				GAME_STATE.player.reputation += 1
+				
+				if current_signal.type != C.MESSAGE_TYPE.FOOD_SERVICE:
+					GAME_STATE.people_remaining += 1
+					await print_random_message(C.MESSAGES.real_success.person)
+					
+					await wait(0.3)
+					await print_text("+ 1% REPUTATION", C.COLORS.orange, 0.01)
+					await print_text("+ 1 POPULATION UNIT", C.COLORS.orange, 0.01)
+				else:
+					var ration_addition = snapped(randi_range(2, 3) + randf(), 0.1)
+					GAME_STATE.ration_remaining += ration_addition
+					await print_random_message(C.MESSAGES.real_success.food_service)
+					
+					await wait(0.3)
+					await print_text("+ 1% REPUTATION", C.COLORS.orange, 0.01)
+					await print_text("+ " + str(ration_addition) +" DAYS OF RATION", C.COLORS.orange, 0.01)
+			"b":
+				GAME_STATE.player.reputation -= 4
+				
+				if current_signal.type != C.MESSAGE_TYPE.FOOD_SERVICE:
+					await print_random_message(C.MESSAGES.real_failed.person)
+				else:
+					await print_random_message(C.MESSAGES.real_failed.food_service)
+				
+				await wait(0.3)
+				await print_text("- 4% REPUTATION", C.COLORS.orange, 0.01)
+	else:
+		match opt:
+			"a":
+				var punishment := randi_range(1, 2)
+				var reputation_deduction: int
+				var population_deduction := 0
+				
+				if punishment == 1:
+					reputation_deduction = 5
+					GAME_STATE.player.reputation -= reputation_deduction
+				else:
+					reputation_deduction = randi_range(2, 3)
+					population_deduction = 1
+					GAME_STATE.people_remaining -= population_deduction
+				
+				if current_signal.type != C.MESSAGE_TYPE.FOOD_SERVICE:
+					await print_random_message(C.MESSAGES.fake_failed.person)
+				else:
+					await print_random_message(C.MESSAGES.fake_failed.food_service)
+				
+				await wait(0.3)
+				await print_text("- "+ str(reputation_deduction) +"% REPUTATION", C.COLORS.orange, 0.01)
+				if population_deduction > 0:
+					await print_text("- 1 POPULATION UNIT", C.COLORS.orange, 0.01)
+			"b":
+				var reputation_addition := 1
+				GAME_STATE.player.reputation += reputation_addition
+				
+				if current_signal.type != C.MESSAGE_TYPE.FOOD_SERVICE:
+					await print_random_message(C.MESSAGES.fake_success.person)
+				else:
+					await print_random_message(C.MESSAGES.fake_success.food_service)
+					
+				await wait(0.3)
+				await print_text("+ 1% REPUTATION", C.COLORS.orange, 0.01)
+
+	return true
+
+
+func print_random_message(s: Array) -> bool:
+	await print_text(s[randi_range(0, s.size() - 1)], C.COLORS.orange, 0.005, true)
+	return true
