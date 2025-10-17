@@ -1,7 +1,7 @@
 extends Node
 
 
-var FINAL_DAY := 30
+var FINAL_DAY := 10
 var day := 1
 var day_finished := false
 @onready var player = {

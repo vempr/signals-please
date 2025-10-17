@@ -31,12 +31,14 @@ offset_top = 402.0
 offset_right = 875.0
 offset_bottom = 2016.0
 theme_override_fonts/font = ExtResource("4_wu84c")
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 30
 text = "You are the appointed leader of an isolated region: the last functioning outpost after the network collapse.
 
 All external contact comes through your Signal Terminal, an old communications system used to vet incoming refugees, traders, and foreign officials. You decide who to let through the border.
 
-Your resources are limited: rations, security, morale. You can survive hunger longer than your people, but your reputation determines whether they continue to follow you."
+Your resources are limited: rations, security, morale. You can survive hunger longer than your people, but your reputation determines whether they continue to follow you.
+
+You must survive for ten days. After that, the N.A.L. ALLIES, the nearest surviving federation, will reach your borders to unite with your region. Until then, you stand alone, a flickering light in the dark."
 autowrap_mode = 2
 
 [node name="PlayButton" type="Button" parent="."]

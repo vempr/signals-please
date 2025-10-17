@@ -25,7 +25,7 @@ func cursor_normal() -> void:
 
 
 func emit_hunger() -> void:
-	display_message.emit("You are at " + str(GAME_STATE.player.hunger) + "% hunger. Do you wish to eat? (-10% hunger)")
+	display_message.emit("You are at " + str(GAME_STATE.player.hunger) + "% hunger. Do you wish to eat? (-10% hunger, -0.1 days of ration)")
 
 
 func emit_full() -> void:
@@ -83,11 +83,17 @@ func _on_window_hover_area_mouse_entered() -> void:
 
 
 func _on_computer_hover_area_mouse_entered() -> void:
+	if GAME_STATE.day_finished:
+		return
+		
 	cursor_point()
 	%ComputerLine.modulate.a = 0.4
 
 
 func _on_computer_hover_area_mouse_exited() -> void:
+	if GAME_STATE.day_finished:
+		return
+		
 	cursor_normal()
 	%ComputerLine.modulate.a = 0.2
 
@@ -108,8 +114,6 @@ func _on_bed_hover_area_mouse_exited() -> void:
 
 func _on_computer_hover_area_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
 	if Input.is_action_pressed("click") && GAME_STATE.day_finished == false:
-		# GAME_STATE.day_finished = true
-		# %BedLine.modulate.a = 0.2
 		trigger_computer.emit()
 
 
@@ -117,3 +121,8 @@ func _on_bed_hover_area_input_event(_viewport: Node, _event: InputEvent, _shape_
 	if Input.is_action_just_pressed("click") && GAME_STATE.day_finished == true:
 		progress.emit()
 		process_mode = Node.PROCESS_MODE_DISABLED
+
+
+func _on_terminal_day_is_over() -> void:
+	%ComputerLine.modulate.a = 0.0
+	%BedLine.modulate.a = 0.2

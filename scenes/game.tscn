@@ -251,3 +251,4 @@ unique_name_in_owner = true
 [connection signal="in_computer" from="Computer" to="." method="_on_computer_in_computer"]
 [connection signal="in_computer" from="Computer" to="Computer/Terminal" method="_on_computer_in_computer"]
 [connection signal="animation_finished" from="Computer/BlackCR/Zoom" to="Computer" method="_on_zoom_animation_finished"]
+[connection signal="day_is_over" from="Computer/Terminal" to="Hover" method="_on_terminal_day_is_over"]

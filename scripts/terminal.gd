@@ -1,5 +1,7 @@
 extends Node2D
 
+signal day_is_over
+
 enum DIFFICULTY { EASY, MEDIUM, HARD }
 const MAX_TERMINAL_LINES := 50
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -16,6 +18,12 @@ var respond_to_signal := false
 var DEBUG := false
 var current_signal = null
 var difficulty
+var signals_left := 3
+
+# for displaying end of day stats
+var rep := 0
+var rat := 0.0
+var pop := 0
 
 
 func _ready() -> void:
@@ -115,10 +123,65 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 		await ddd()
 		await ddd()
 		nl()
-		await print_text(C.MESSAGES.incoming_signal, C.COLORS.blue)
 		
-		can_submit = true
-		incoming_signal_next = true
+		signals_left -= 1
+		if signals_left > 0:
+			await print_text(C.MESSAGES.incoming_signal, C.COLORS.blue)
+			can_submit = true
+			incoming_signal_next = true
+		else:
+			nl()
+			await print_text("SIG: End of day report, compiling local metrics.", C.COLORS.orange, 0.01, true)
+			await ddd()
+			nl()
+			nl()
+			
+			var summary := ""
+			var prev_rep = GAME_STATE.player.reputation
+			var prev_rat = GAME_STATE.ration_remaining
+			var prev_pop = GAME_STATE.people_remaining
+			
+			GAME_STATE.player.reputation += rep
+			GAME_STATE.people_remaining += pop
+			
+			var new_rations = prev_rat + rat
+			var daily_consumption = 0.1 * GAME_STATE.people_remaining
+			var final_rations = max(0.0, new_rations - daily_consumption)
+			
+			GAME_STATE.ration_remaining = final_rations
+			
+			var curr_rep = GAME_STATE.player.reputation
+			var curr_rat = GAME_STATE.ration_remaining
+			var curr_pop = GAME_STATE.people_remaining
+			
+			if rep > 0:
+				summary += "Reputation improved by %d%% [%d%% -> %d%%]\n" % [rep, prev_rep, curr_rep]
+			elif rep < 0:
+				summary += "Reputation declined by %d%% [%d%% -> %d%%]\n" % [abs(rep), prev_rep, curr_rep]
+			else:
+				summary += "Reputation held steady. [%d%%]\n" % [curr_rep]
+
+			if rat > 0:
+				summary += "Ration stores increased by %.1f days [%.1f -> %.1f before consumption]\n" % [rat, prev_rat, new_rations]
+			elif rat < 0:
+				summary += "Ration reserves depleted by %.1f days [%.1f -> %.1f before consumption]\n" % [abs(rat), prev_rat, new_rations]
+			else:
+				summary += "Ration balance unchanged before consumption. [%.1f]\n" % [new_rations]
+
+			summary += "Daily consumption reduced stores by %.1f days (0.1 * %d people) [FINAL: %.1f]\n" % [daily_consumption, curr_pop, curr_rat]
+
+			if pop > 0:
+				summary += "Population grew by %d new arrivals [%d -> %d]\n" % [pop, prev_pop, curr_pop]
+			elif pop < 0:
+				summary += "Population decreased by %d individuals [%d -> %d]\n" % [abs(pop), prev_pop, curr_pop]
+			else:
+				summary += "Population unchanged. [%d]\n" % [curr_pop]
+			
+			await print_text(summary, "#00ff00", 0.01, true)
+			await wait(1.0)
+			await print_text("SIG: You must rest now, commander. See you tomorrow.", C.COLORS.orange, 0.01, true)
+			GAME_STATE.day_finished = true
+			day_is_over.emit()
 
 
 func print_text(text: String, color: String = "white", speed: float = 0.005, take_breaks: bool = false) -> bool:
@@ -256,17 +319,17 @@ func generate_id() -> String:
 
 
 func generate_signal_integrity() -> String:
-	var p := 0.0
+	var percent := 0.0
 	
 	match difficulty:
 		DIFFICULTY.EASY:
-			p = snapped(randi_range(60, 99) + randf(), 0.1)
+			percent = snapped(randi_range(60, 99) + randf(), 0.1)
 		DIFFICULTY.MEDIUM:
-			p = snapped(randi_range(40, 70) + randf(), 0.1)
+			percent = snapped(randi_range(40, 70) + randf(), 0.1)
 		DIFFICULTY.HARD:
-			p = snapped(randi_range(0, 99) + randf(), 0.1)
+			percent = snapped(randi_range(0, 99) + randf(), 0.1)
 
-	return str(p) + "%"
+	return str(percent) + "%"
 
 
 func _on_memory_timer_timeout() -> void:
@@ -292,32 +355,37 @@ func ddd() -> bool:
 func assess_and_display(opt: String) -> bool:
 	if opt == "c":
 		var reputation_deduction := randi_range(1, 2)
-		GAME_STATE.player.reputation -= reputation_deduction
+		rep -= reputation_deduction
+		
+		await print_text("SIG: Indecisiveness is always frowned upon, commander. Please remember this.", C.COLORS.orange, 0.005, true)
 		await print_text("- "+ str(reputation_deduction) +"% REPUTATION", C.COLORS.orange, 0.01)
 		return true
 	
 	if current_signal.is_real:
 		match opt:
 			"a":
-				GAME_STATE.player.reputation += 1
+				var reputation_addition := 2
+				rep += reputation_addition
 				
 				if current_signal.type != C.MESSAGE_TYPE.FOOD_SERVICE:
-					GAME_STATE.people_remaining += 1
+					var people_addition := 1
+					pop += people_addition
 					await print_random_message(C.MESSAGES.real_success.person)
 					
 					await wait(0.3)
-					await print_text("+ 1% REPUTATION", C.COLORS.orange, 0.01)
+					await print_text("+ 2% REPUTATION", C.COLORS.orange, 0.01)
 					await print_text("+ 1 POPULATION UNIT", C.COLORS.orange, 0.01)
 				else:
-					var ration_addition = snapped(randi_range(2, 3) + randf(), 0.1)
-					GAME_STATE.ration_remaining += ration_addition
+					var ration_addition = snapped(randi_range(1, 3) + randf(), 0.1)
+					rat += ration_addition
 					await print_random_message(C.MESSAGES.real_success.food_service)
 					
 					await wait(0.3)
-					await print_text("+ 1% REPUTATION", C.COLORS.orange, 0.01)
+					await print_text("+ 2% REPUTATION", C.COLORS.orange, 0.01)
 					await print_text("+ " + str(ration_addition) +" DAYS OF RATION", C.COLORS.orange, 0.01)
 			"b":
-				GAME_STATE.player.reputation -= 4
+				var reputation_deduction := 6
+				rep -= reputation_deduction
 				
 				if current_signal.type != C.MESSAGE_TYPE.FOOD_SERVICE:
 					await print_random_message(C.MESSAGES.real_failed.person)
@@ -325,21 +393,25 @@ func assess_and_display(opt: String) -> bool:
 					await print_random_message(C.MESSAGES.real_failed.food_service)
 				
 				await wait(0.3)
-				await print_text("- 4% REPUTATION", C.COLORS.orange, 0.01)
+				await print_text("- 6% REPUTATION", C.COLORS.orange, 0.01)
 	else:
 		match opt:
 			"a":
 				var punishment := randi_range(1, 2)
-				var reputation_deduction: int
+				var reputation_deduction := 0
+				var ration_deduction := 0
 				var population_deduction := 0
 				
 				if punishment == 1:
-					reputation_deduction = 5
-					GAME_STATE.player.reputation -= reputation_deduction
+					reputation_deduction = randi_range(4, 8)
+					ration_deduction = snapped(randf(), 0.1) 
 				else:
-					reputation_deduction = randi_range(2, 3)
+					reputation_deduction = randi_range(2, 5)
 					population_deduction = 1
-					GAME_STATE.people_remaining -= population_deduction
+
+				pop -= population_deduction
+				rep -= reputation_deduction
+				rat -= ration_deduction
 				
 				if current_signal.type != C.MESSAGE_TYPE.FOOD_SERVICE:
 					await print_random_message(C.MESSAGES.fake_failed.person)
@@ -348,11 +420,15 @@ func assess_and_display(opt: String) -> bool:
 				
 				await wait(0.3)
 				await print_text("- "+ str(reputation_deduction) +"% REPUTATION", C.COLORS.orange, 0.01)
-				if population_deduction > 0:
+				
+				if punishment == 1:
+					await print_text("- " + str(ration_deduction) + " DAYS OF RATION", C.COLORS.orange, 0.01)
+				else:
 					await print_text("- 1 POPULATION UNIT", C.COLORS.orange, 0.01)
+					
 			"b":
-				var reputation_addition := 1
-				GAME_STATE.player.reputation += reputation_addition
+				var reputation_addition := 3
+				rep += reputation_addition
 				
 				if current_signal.type != C.MESSAGE_TYPE.FOOD_SERVICE:
 					await print_random_message(C.MESSAGES.fake_success.person)
@@ -360,7 +436,7 @@ func assess_and_display(opt: String) -> bool:
 					await print_random_message(C.MESSAGES.fake_success.food_service)
 					
 				await wait(0.3)
-				await print_text("+ 1% REPUTATION", C.COLORS.orange, 0.01)
+				await print_text("+ 3% REPUTATION", C.COLORS.orange, 0.01)
 
 	return true
 
