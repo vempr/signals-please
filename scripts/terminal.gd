@@ -142,40 +142,54 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 			var prev_pop = GAME_STATE.people_remaining
 			
 			GAME_STATE.player.reputation += rep
-			GAME_STATE.people_remaining += pop
+			GAME_STATE.people_remaining += pop 
 			
 			var new_rations = prev_rat + rat
 			var daily_consumption = 0.1 * GAME_STATE.people_remaining
-			var final_rations = max(0.0, new_rations - daily_consumption)
+			var final_rations = new_rations - daily_consumption
+
+			# starvation: 1 death per 0.1 missing ration days
+			var deaths := 0
+			if final_rations < 0.0:
+				deaths = int(abs(final_rations) / 0.1)
+				GAME_STATE.people_remaining = max(0, GAME_STATE.people_remaining - deaths)
+				final_rations = 0.0
 			
 			GAME_STATE.ration_remaining = final_rations
-			
 			var curr_rep = GAME_STATE.player.reputation
 			var curr_rat = GAME_STATE.ration_remaining
 			var curr_pop = GAME_STATE.people_remaining
-			
+
 			if rep > 0:
 				summary += "Reputation improved by %d%% [%d%% -> %d%%]\n" % [rep, prev_rep, curr_rep]
 			elif rep < 0:
 				summary += "Reputation declined by %d%% [%d%% -> %d%%]\n" % [abs(rep), prev_rep, curr_rep]
 			else:
 				summary += "Reputation held steady. [%d%%]\n" % [curr_rep]
-
+			
+			var after_arrivals = prev_pop + pop
+			if pop > 0:
+				summary += "New arrivals: %d people.\n" % pop
+			elif pop < 0:
+				summary += "Departures: %d people.\n" % abs(pop)
+			
+			summary += "Population change: %d -> %d -> %d\n" % [prev_pop, after_arrivals, curr_pop]
+			
 			if rat > 0:
 				summary += "Ration stores increased by %.1f days [%.1f -> %.1f before consumption]\n" % [rat, prev_rat, new_rations]
 			elif rat < 0:
 				summary += "Ration reserves depleted by %.1f days [%.1f -> %.1f before consumption]\n" % [abs(rat), prev_rat, new_rations]
 			else:
 				summary += "Ration balance unchanged before consumption. [%.1f]\n" % [new_rations]
-
-			summary += "Daily consumption reduced stores by %.1f days (0.1 * %d people) [FINAL: %.1f]\n" % [daily_consumption, curr_pop, curr_rat]
-
-			if pop > 0:
-				summary += "Population grew by %d new arrivals [%d -> %d]\n" % [pop, prev_pop, curr_pop]
-			elif pop < 0:
-				summary += "Population decreased by %d individuals [%d -> %d]\n" % [abs(pop), prev_pop, curr_pop]
+			
+			summary += "Daily consumption reduced stores by %.1f days (0.1 × %d people)\n" % [daily_consumption, curr_pop + deaths]
+			
+			if deaths > 0:
+				summary += "[!] STARVATION: %d people perished due to lack of rations.\n" % deaths
+				summary += "Final rations depleted to 0.0 days.\n"
 			else:
-				summary += "Population unchanged. [%d]\n" % [curr_pop]
+				summary += "Ration stores remaining after consumption: %.1f days.\n" % curr_rat
+			
 			
 			await print_text(summary, "#00ff00", 0.01, true)
 			await wait(1.0)

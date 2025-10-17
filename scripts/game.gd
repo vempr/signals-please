@@ -16,8 +16,18 @@ func _process(_delta: float) -> void:
 
 
 func _on_hover_progress() -> void:
-	GAME_STATE.day += 1
 	await Fade.fade_out().finished
+	GAME_STATE.day += 1
+	GAME_STATE.player.hunger += randi_range(1, 10) + 20
+	
+	if GAME_STATE.player.hunger > 100:
+		GAME_STATE.lost_to = GAME_STATE.DEATH_REASON.HUNGER
+	elif GAME_STATE.player.reputation < 10:
+		GAME_STATE.lost_to = GAME_STATE.DEATH_REASON.REPUTATION
+	
+	print("lost to:")
+	print(GAME_STATE.lost_to)
+	
 	get_tree().change_scene_to_file("res://scenes/transition_scene.tscn")
 
 

@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dv5o0yn2j6xht"]
+[gd_scene load_steps=6 format=3 uid="uid://dv5o0yn2j6xht"]
 
 [ext_resource type="Script" uid="uid://dmln134mf8nbr" path="res://scripts/main_menu.gd" id="1_l6cm7"]
 [ext_resource type="Texture2D" uid="uid://c0hlw0e2d107l" path="res://assets/images/bg.png" id="2_ekxnf"]
 [ext_resource type="FontFile" uid="uid://bar55wglxrc3e" path="res://assets/fonts/Pixeled.ttf" id="3_bqqt6"]
+[ext_resource type="StyleBox" uid="uid://bc8oxxejsrbsp" path="res://styles/normal_button.tres" id="4_8ln24"]
 [ext_resource type="FontFile" uid="uid://cbi6qc2w2chwv" path="res://assets/fonts/Pixellari.ttf" id="4_wu84c"]
 
 [node name="MainMenu" type="Node2D"]
@@ -31,7 +32,7 @@ offset_top = 402.0
 offset_right = 875.0
 offset_bottom = 2016.0
 theme_override_fonts/font = ExtResource("4_wu84c")
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 32
 text = "You are the appointed leader of an isolated region: the last functioning outpost after the network collapse.
 
 All external contact comes through your Signal Terminal, an old communications system used to vet incoming refugees, traders, and foreign officials. You decide who to let through the border.
@@ -48,6 +49,17 @@ offset_right = 871.0
 offset_bottom = 359.0
 theme_override_fonts/font = ExtResource("3_bqqt6")
 theme_override_font_sizes/font_size = 21
+theme_override_styles/focus = ExtResource("4_8ln24")
+theme_override_styles/disabled_mirrored = ExtResource("4_8ln24")
+theme_override_styles/disabled = ExtResource("4_8ln24")
+theme_override_styles/hover_pressed_mirrored = ExtResource("4_8ln24")
+theme_override_styles/hover_pressed = ExtResource("4_8ln24")
+theme_override_styles/hover_mirrored = ExtResource("4_8ln24")
+theme_override_styles/hover = ExtResource("4_8ln24")
+theme_override_styles/pressed_mirrored = ExtResource("4_8ln24")
+theme_override_styles/pressed = ExtResource("4_8ln24")
+theme_override_styles/normal_mirrored = ExtResource("4_8ln24")
+theme_override_styles/normal = ExtResource("4_8ln24")
 text = "BIG BUTTON THAT WANTS YOU TO CLICK (PLAY)"
 autowrap_mode = 2
 

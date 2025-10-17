@@ -1,6 +1,5 @@
 extends Node2D
 
-@onready var GameScene := preload("res://scenes/game.tscn")
 var text_to_type := "Day " + str(GAME_STATE.day)
 var i := 0
 var show_cursor := true
@@ -51,5 +50,8 @@ func delete_text() -> void:
 	await get_tree().create_timer(0.5).timeout
 	await Fade.fade_out(0.7).finished
 	
-	get_tree().change_scene_to_packed(GameScene)
+	if GAME_STATE.lost_to != null:
+		get_tree().change_scene_to_file("res://scenes/game_over.tscn")
+	else:
+		get_tree().change_scene_to_file("res://scenes/game.tscn")
 	Fade.fade_in(1.5)
