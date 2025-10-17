@@ -12,8 +12,8 @@ const DECREASE_AFTER_EATING = 10
 # each can be a real or fake, letting fake in will tank reputation
 
 const sig_intro_1 = "SIG: Good morning, Commander. The night patrols found two bodies near the perimeter fence. Starvation. Not our people, outsiders. They must have come from the southern wastelands."
-const sig_intro_2 = "SIG: We’ll get more requests today. Traders, refugees, deserters. The law says to deny anyone without clearance. The people say we need allies."
-const sig_intro_3 = "SIG: Ultimately, it’s your call. Each signal comes with a risk. Let the wrong one in and your rations run dry, or worse, your people turn on you. It is your task to spot any questionable 'signals' in the requests that we receive. Look out for request data, corrupted characters, strange syntax/phrasing, or transmission noise."
+const sig_intro_2 = "SIG: We'll get more requests today. Traders, refugees, deserters. The law says to deny anyone without clearance. The people say we need allies."
+const sig_intro_3 = "SIG: Ultimately, it's your call. Each signal comes with a risk. Let the wrong one in and your rations run dry, or worse, your people turn on you. It is your task to spot any questionable 'signals' in the requests that we receive. Look out for request data, corrupted characters, strange syntax/phrasing, or transmission noise."
 
 const MESSAGES = {
 	"incoming_signal": "[b]\n\n--------------------\nINCOMING SIGNAL...\nTYPE 'r' TO RECEIVE.\n--------------------\n\n[/b]",
@@ -34,11 +34,11 @@ const MESSAGES = {
 			"SIG: Refugees assisted with perimeter fortifications. Efficiency up 11%.",
 			"SIG: Minimal ration consumption. Contribution outweighs cost.",
 			"SIG: Civil reports list subject as cooperative and respectful.",
-			"SIG: Medical officer confirms subject’s help in infirmary. Infection rate dropped.",
+			"SIG: Medical officer confirms subject's help in infirmary. Infection rate dropped.",
 			"SIG: Subject voluntarily extended patrol shift. Discipline noted.",
 			"SIG: Behavioral scan clean. Trust metrics rising slowly.",
 			"SIG: Detected low threat probability. Integration deemed successful.",
-			"SIG: Subject’s technical skills proved useful in generator repair.",
+			"SIG: Subject's technical skills proved useful in generator repair.",
 			"SIG: Agricultural output increased post-arrival. Coincidence uncertain.",
 			"SIG: Nearby settlers reacted positively to your leniency.",
 			"SIG: Subject acted as mediator in civil dispute. De-escalation successful.",
@@ -48,7 +48,7 @@ const MESSAGES = {
 			"SIG: Minor increase in population stability observed post-decision.",
 			"SIG: Psychological evaluation: optimistic, grounded, compliant.",
 			"SIG: Subject voluntarily returned surplus rations. Integrity confirmed.",
-			"SIG: Nearby border posts report smoother communication. Coinciding with subject’s arrival.",
+			"SIG: Nearby border posts report smoother communication. Coinciding with subject's arrival.",
 			"SIG: Unit cohesion metrics improved. Word of leadership spreading.",
 			"SIG: The situation remains calm. Decision appears to have been correct.",
 			"SIG: Subject transmitted gratitude message. Ends with 'For the region, Commander.'"
@@ -76,11 +76,11 @@ const MESSAGES = {
 			"SIG: Deserters refused orders. Situation escalating.",
 			"SIG: Drone patrol attacked overnight. Witness reports match newcomer profile.",
 			"SIG: Food cache missing. Locals whisper about betrayal.",
-			"SIG: Subject’s group refusing to work. Riots forming at depot.",
+			"SIG: Subject's group refusing to work. Riots forming at depot.",
 			"SIG: Attempted sabotage of western relay prevented. Identity unknown but suspicious timing.",
 			"SIG: Violence reported in sleeping quarters. Attributed to recent arrivals.",
 			"SIG: Unauthorized transmission burst recorded after midnight. Encryption untraceable.",
-			"SIG: Patrol found smuggled ammunition in subject’s quarters.",
+			"SIG: Patrol found smuggled ammunition in subject's quarters.",
 			"SIG: Public sentiment dropping fast. Whisper networks blame you directly.",
 			"SIG: Water purifier malfunctioned. Possible intentional interference.",
 			"SIG: Contacted outside frequencies without clearance. Communications now monitored.",
@@ -92,7 +92,7 @@ const MESSAGES = {
 			"SIG: Subject attempted escape during questioning. Neutralized.",
 			"SIG: Signal corruption spreading through internal grid. Origin uncertain.",
 			"SIG: Supply theft confirmed. Community confidence collapsing.",
-			"SIG: Fatal altercation near storage block. Subject’s name appears in logs."
+			"SIG: Fatal altercation near storage block. Subject's name appears in logs."
 		],
 		"food_service": [
 			"SIG: Shipment contained concealed explosive device. Bay destroyed.",
@@ -111,7 +111,7 @@ const MESSAGES = {
 			"SIG: Behavioral anomaly confirmed. Automated quarantine engaged, no losses.",
 			"SIG: Decoy identity cross-referenced. True sender linked to sabotage network.",
 			"SIG: Your caution prevented unauthorized perimeter entry.",
-			"SIG: Counter-intelligence notes: ‘Command intuition preserved critical integrity.’",
+			"SIG: Counter-intelligence notes: ‘Command intuition preserved critical integrity.'",
 			"SIG: Tampered language module identified. Syntax irregularity matched known intrusion pattern.",
 			"SIG: Purged corrupted attachment. Attempted malware payload neutralized.",
 			"SIG: Civilian morale stable. Citizens unaware of the incident.",
@@ -145,7 +145,7 @@ const MESSAGES = {
 			"SIG: Forged distress call rerouted drones to enemy perimeter.",
 			"SIG: Accepted signal carried latent trojan. Local systems rebooting autonomously.",
 			"SIG: Linguistic irregularities overlooked. AI parser now compromised.",
-			"SIG: The ‘rescued’ individual vanished after midnight. Traces lead to outer perimeter.",
+			"SIG: The ‘rescued' individual vanished after midnight. Traces lead to outer perimeter.",
 			"SIG: Message origin faked. Actual source untraceable. Suspicion spreading internally.",
 			"SIG: Spoofed metadata passed all checks. Now unknown commands executing remotely.",
 			"SIG: Decoy request redirected ration convoy. Delivery loss confirmed.",
@@ -167,18 +167,18 @@ const MESSAGES = {
 	"real": {
 		MESSAGE_TYPE.NEED_FOOD: [
 			{
-				"message_content": "Commander… this is Lira. I’ve been walking for nine days from the dry plains. My family’s gone; the wells turned to dust and the beasts died before the second sunrise. I’m at your perimeter now. I can work-clean, carry, fix what’s broken-just don’t turn me away. I don’t have anything left to trade except my hands. Please, I’ll take whatever scraps you can spare. I don’t want to die at the gate.",
+				"message_content": "Commander… this is Lira. I've been walking for nine days from the dry plains. My family's gone; the wells turned to dust and the beasts died before the second sunrise. I'm at your perimeter now. I can work-clean, carry, fix what's broken-just don't turn me away. I don't have anything left to trade except my hands. Please, I'll take whatever scraps you can spare. I don't want to die at the gate.",
 				"a": {
 					"decision": "Accept her plea and send a drone escort with minimal rations.",
 					"reaction": [
-						"Signal received. 'You heard me, Commander? Thank you. I’ll prove I’m worth the food.'",
+						"Signal received. 'You heard me, Commander? Thank you. I'll prove I'm worth the food.'",
 						"Later: 'The bread was stale, but it tasted like a miracle.'"
 					]
 				},
 				"b": {
 					"decision": "Refuse entry and instruct patrols to clear her from the fence.",
 					"reaction": [
-						"Faint voice: 'So Ironvale’s mercy ends at a gate, does it?'",
+						"Faint voice: 'So Ironvale's mercy ends at a gate, does it?'",
 						"Perimeter sensors show one cooling heat signature near the fence."
 					]
 				},
@@ -190,7 +190,7 @@ const MESSAGES = {
 				}
 			},
 			{
-				"message_content": "Commander, my name’s Orlen. I ran the old nutrient vats east of here until the filters clogged for good. I’ve been trying to grind roots into meal, but the stench drives me mad. I’ve gone three days without sleep. If there’s any surplus left in Ironvale-anything-I’ll work it off. I remember when your convoys came with green things. I just want to taste something alive again before the cold sets in.",
+				"message_content": "Commander, my name's Orlen. I ran the old nutrient vats east of here until the filters clogged for good. I've been trying to grind roots into meal, but the stench drives me mad. I've gone three days without sleep. If there's any surplus left in Ironvale-anything-I'll work it off. I remember when your convoys came with green things. I just want to taste something alive again before the cold sets in.",
 				"a": {
 					"decision": "Authorize emergency food relief and send remaining stock to Orlen.",
 					"reaction": [
@@ -200,7 +200,7 @@ const MESSAGES = {
 				"b": {
 					"decision": "Deny the request and preserve rations for the city core.",
 					"reaction": [
-						"'Understood. The core first, always. I’ll remember what mercy costs here.'"
+						"'Understood. The core first, always. I'll remember what mercy costs here.'"
 					]
 				},
 				"c": {
@@ -215,11 +215,11 @@ const MESSAGES = {
 
 		MESSAGE_TYPE.PROVIDE_FOOD: [
 			{
-				"message_content": "Commander, I’m Renn of the merchant roads. I scavenged a few sealed crates from an old depot-nutrient paste, labeled human-grade. Some hissed when I opened them, but I’ve been eating it. Still alive. I can trade half my stock for a night’s shelter and protection. It’s not much, but it could feed Ironvale through the frost. Let me in, Commander. I’m tired of sleeping with one eye open.",
+				"message_content": "Commander, I'm Renn of the merchant roads. I scavenged a few sealed crates from an old depot-nutrient paste, labeled human-grade. Some hissed when I opened them, but I've been eating it. Still alive. I can trade half my stock for a night's shelter and protection. It's not much, but it could feed Ironvale through the frost. Let me in, Commander. I'm tired of sleeping with one eye open.",
 				"a": {
 					"decision": "Approve the trade and grant temporary shelter to Renn.",
 					"reaction": [
-						"'I’m in, Commander. Camped near the hangars. It almost smells clean here.'",
+						"'I'm in, Commander. Camped near the hangars. It almost smells clean here.'",
 						"Later: 'Found something alive in one of the cans. Ate it anyway. Still breathing.'"
 					]
 				},
@@ -238,17 +238,17 @@ const MESSAGES = {
 				}
 			},
 			{
-				"message_content": "Commander, I’m Mara. Used to run the refinery’s hydroponic towers before the power cuts. Managed to keep a few stacks running-real greens, not synth. If you open your southern ports, I can send steady shipments. Just need a bit of fuel and oil to keep the pumps alive. If not, I’ll sell to the militias instead. They pay in blood. Your choice who eats better.",
+				"message_content": "Commander, I'm Mara. Used to run the refinery's hydroponic towers before the power cuts. Managed to keep a few stacks running-real greens, not synth. If you open your southern ports, I can send steady shipments. Just need a bit of fuel and oil to keep the pumps alive. If not, I'll sell to the militias instead. They pay in blood. Your choice who eats better.",
 				"a": {
 					"decision": "Accept her offer and schedule intake through the south channel.",
 					"reaction": [
-						"'Understood. I’ll start the pumps. Ironvale will taste green again soon.'"
+						"'Understood. I'll start the pumps. Ironvale will taste green again soon.'"
 					]
 				},
 				"b": {
 					"decision": "Decline, unwilling to share limited fuel reserves.",
 					"reaction": [
-						"'Then starve pure, Commander. I’ll feed those who value survival over pride.'"
+						"'Then starve pure, Commander. I'll feed those who value survival over pride.'"
 					]
 				},
 				"c": {
@@ -262,7 +262,7 @@ const MESSAGES = {
 
 		MESSAGE_TYPE.NEED_HELP: [
 			{
-				"message_content": "Commander, this is Rask. The reactor conduit ruptured. I’ve sealed what I can, but pressure’s building fast. The heat’s climbing, and the suits are starting to melt. I can’t stop it without new couplers or remote access from your end. If this goes, your silos burn with us. Please, authorize an override-or finish it clean. Just don’t let me die waiting.",
+				"message_content": "Commander, this is Rask. The reactor conduit ruptured. I've sealed what I can, but pressure's building fast. The heat's climbing, and the suits are starting to melt. I can't stop it without new couplers or remote access from your end. If this goes, your silos burn with us. Please, authorize an override-or finish it clean. Just don't let me die waiting.",
 				"a": {
 					"decision": "Send a maintenance drone and authorize remote override.",
 					"reaction": [
@@ -283,17 +283,17 @@ const MESSAGES = {
 				}
 			},
 			{
-				"message_content": "Commander, I’m Tal from the field hospital. The generator’s dead. The wounded are freezing. I’ve burned everything I can-bedding, crates, even stretchers-but it won’t last till morning. If you have a spare cell, I can keep them alive another night. They trusted Ironvale. Don’t let them die believing a lie.",
+				"message_content": "Commander, I'm Tal from the field hospital. The generator's dead. The wounded are freezing. I've burned everything I can-bedding, crates, even stretchers-but it won't last till morning. If you have a spare cell, I can keep them alive another night. They trusted Ironvale. Don't let them die believing a lie.",
 				"a": {
 					"decision": "Send an energy cell to the hospital immediately.",
 					"reaction": [
-						"'It’s humming again, Commander. They’ll wake soon. You saved them… and me.'"
+						"'It's humming again, Commander. They'll wake soon. You saved them… and me.'"
 					]
 				},
 				"b": {
 					"decision": "Refuse, citing energy conservation protocols.",
 					"reaction": [
-						"'Understood. We’ll burn what’s left. Ironvale stays bright.'"
+						"'Understood. We'll burn what's left. Ironvale stays bright.'"
 					]
 				},
 				"c": {
@@ -307,11 +307,11 @@ const MESSAGES = {
 
 		MESSAGE_TYPE.PROVIDE_HELP: [
 			{
-				"message_content": "Commander, name’s Dr. Eyr. I’ve been tending the plague remnants across the valley. Supplies are low, but my hands are steady. I’m asking to work within your walls-set up a small clinic, patch your workers, maybe your soldiers. I don’t carry the sickness; I carry the cure. Trust me, and I’ll prove it.",
+				"message_content": "Commander, name's Dr. Eyr. I've been tending the plague remnants across the valley. Supplies are low, but my hands are steady. I'm asking to work within your walls-set up a small clinic, patch your workers, maybe your soldiers. I don't carry the sickness; I carry the cure. Trust me, and I'll prove it.",
 				"a": {
 					"decision": "Grant entry and assign a clinic zone for Dr. Eyr.",
 					"reaction": [
-						"'I’m inside. First patient already waiting. You made the right call, Commander.'"
+						"'I'm inside. First patient already waiting. You made the right call, Commander.'"
 					]
 				},
 				"b": {
@@ -328,17 +328,17 @@ const MESSAGES = {
 				}
 			},
 			{
-				"message_content": "Commander, this is Neven. I keep an old relay tower alive north of your city. I’ve found faint signals-might be survivors. With your permission, I’ll bring Ironvale back onto the long-range network. You’d hear the world again, though the world might hear you too. What do you say-silence or connection?",
+				"message_content": "Commander, this is Neven. I keep an old relay tower alive north of your city. I've found faint signals-might be survivors. With your permission, I'll bring Ironvale back onto the long-range network. You'd hear the world again, though the world might hear you too. What do you say-silence or connection?",
 				"a": {
 					"decision": "Approve integration and reconnect external channels.",
 					"reaction": [
-						"'Relay humming now. You’ll hear voices again soon, Commander. Some kind, some not.'"
+						"'Relay humming now. You'll hear voices again soon, Commander. Some kind, some not.'"
 					]
 				},
 				"b": {
 					"decision": "Reject; isolation ensures safety.",
 					"reaction": [
-						"'Understood. I’ll let the static keep you company.'"
+						"'Understood. I'll let the static keep you company.'"
 					]
 				},
 				"c": {

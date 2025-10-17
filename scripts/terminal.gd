@@ -19,6 +19,8 @@ var DEBUG := false
 var current_signal = null
 var difficulty
 var signals_left := 3
+var must_receive_ration := false
+var ration_signal_i := -1 # only valid if player must_receive_ration
 
 # for displaying end of day stats
 var rep := 0
@@ -27,9 +29,13 @@ var pop := 0
 
 
 func _ready() -> void:
+	if GAME_STATE.last_day_received_ration - GAME_STATE.day >= 2:
+		must_receive_ration = true
+		ration_signal_i = randi_range(1, 3)
+	
 	label.text = ""
 	label.grab_focus()
-	DEBUG = true
+	DEBUG = false
 
 
 func _on_player_input_text_submitted(new_text: String) -> void:
@@ -123,6 +129,20 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 		await ddd()
 		await ddd()
 		nl()
+		
+		if GAME_STATE.people_remaining + pop < 0:
+			nl()
+			GAME_STATE.lost_to = GAME_STATE.DEATH_REASON.JUMPED
+			await print_text("SIG: Commander..?", C.COLORS.orange, 0.1, true)
+			await wait(0.5)
+			
+			%TypingTimer.stop()
+			%MemoryTimer.stop()
+			
+			await Fade.fade_out(2.0).finished
+			get_tree().change_scene_to_file("res://scenes/game_over.tscn")
+			Fade.fade_in()
+			queue_free()
 		
 		signals_left -= 1
 		if signals_left > 0:
@@ -229,6 +249,8 @@ func validate_input(s: String, strings: Array[String]) -> bool:
 
 
 func wait(time: float = 0.5) -> bool:
+	if DEBUG:
+		return true
 	timer.start(time)
 	await timer.timeout
 	return true
@@ -240,20 +262,35 @@ func _on_computer_in_computer() -> void:
 
 
 func generate_real_signal() -> void:
-	var types =  C.MESSAGE_TYPE.values()
-	var rand_type = types[randi_range(0, types.size() - 1)]
-	var is_real = randi_range(0, 1)
+	if DEBUG:
+		print(must_receive_ration)
+		print(ration_signal_i)
+	
+	var types = C.MESSAGE_TYPE.values()
+	var type
+	var is_real: int
+	
+	if must_receive_ration && ration_signal_i == signals_left:
+		type = C.MESSAGE_TYPE.FOOD_SERVICE
+		is_real = 1
+	else:
+		type = types[randi_range(0, types.size() - 1)]
+		is_real = randi_range(0, 1)
+	
+	if type == C.MESSAGE_TYPE.FOOD_SERVICE && is_real:
+		GAME_STATE.last_day_received_ration = GAME_STATE.day
+	
 	
 	if is_real:
 		current_signal = {
-			"data": C.MESSAGES.real[rand_type][randi_range(0, 1)],
-			"type": rand_type,
+			"data": C.MESSAGES.real[type][randi_range(0, 1)],
+			"type": type,
 			"is_real": true,
 		}
 	else:
 		current_signal = {
-			"data": C.MESSAGES.fake[rand_type][randi_range(0, 1)],
-			"type": rand_type,
+			"data": C.MESSAGES.fake[type][randi_range(0, 1)],
+			"type": type,
 			"is_real": false,
 		}
 

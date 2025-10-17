@@ -12,7 +12,7 @@ var DEBUG := false
 func _ready() -> void:
 	DEBUG = false
 	if DEBUG:
-		GAME_STATE.lost_to = GAME_STATE.DEATH_REASON.HUNGER
+		GAME_STATE.lost_to = GAME_STATE.DEATH_REASON.JUMPED
 	
 	label.text = ""
 	for letter in sig_text:
@@ -44,6 +44,10 @@ func _ready() -> void:
 			%IsolationEnding.modulate.a = 0.0
 			%IsolationEnding.visible = true
 			tween.tween_property(%IsolationEnding, "modulate:a", 1.0, 5.0)
+		GAME_STATE.DEATH_REASON.JUMPED:
+			%JumpedEnding.modulate.a = 0.0
+			%JumpedEnding.visible = true
+			tween.tween_property(%JumpedEnding, "modulate:a", 1.0, 5.0)
 	
 	await tween.finished
 

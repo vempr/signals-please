@@ -76,6 +76,7 @@ unique_name_in_owner = true
 one_shot = true
 
 [node name="MemoryTimer" type="Timer" parent="."]
+unique_name_in_owner = true
 wait_time = 10.0
 autostart = true
 

@@ -1,18 +1,20 @@
 extends Node
 
-# player will die immediately during day if people_remaining is 0
+# player will die immediately in terminal if people_remaining is 0
 # & happens to choose the wrong option + get unlucky with punishment
 # (-1 person and only person left is commander -> player loses)
-enum DEATH_REASON { HUNGER, REPUTATION, ISOLATION }
+# ((called JUMPED cuz I couldn't think of a better name xd))
+enum DEATH_REASON { HUNGER, REPUTATION, ISOLATION, JUMPED }
 
-const INITIAL_HUNGER := 99 # randi_range(1, 10) + 20
+var INITIAL_HUNGER := randi_range(1, 10) + 20
 var INITIAL_REPUTATION := randi_range(1, 10) + 40
-var INITIAL_RATION_REMAINING: float = 0.2 # snapped(randi_range(5, 7) + randf(), 0.1)
-const INITIAL_PEOPLE_REMAINING := 15
+var INITIAL_RATION_REMAINING: float = snapped(randi_range(5, 6) + randf(), 0.1)
+const INITIAL_PEOPLE_REMAINING := 0 # 15
 
 var lost_to = null
 var FINAL_DAY := 10
 var day := 1
+var last_day_received_ration := 1
 var day_finished := false
 @onready var player = {
 	"hunger": INITIAL_HUNGER, 
@@ -38,9 +40,14 @@ func get_reputation_status() -> String:
 	return "CONDEMNED"
 
 
+func add_hunger() -> void:
+	player.hunger += randi_range(1, 10) + 20
+
+
 func reset() -> void:
 	lost_to = null
 	day = 1
+	last_day_received_ration = 1
 	day_finished = false
 	player.hunger = INITIAL_HUNGER
 	player.reputation = INITIAL_REPUTATION

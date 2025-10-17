@@ -18,7 +18,7 @@ func _process(_delta: float) -> void:
 func _on_hover_progress() -> void:
 	await Fade.fade_out().finished
 	GAME_STATE.day += 1
-	GAME_STATE.player.hunger += randi_range(1, 10) + 20
+	GAME_STATE.add_hunger()
 	
 	if GAME_STATE.player.hunger > 100:
 		GAME_STATE.lost_to = GAME_STATE.DEATH_REASON.HUNGER

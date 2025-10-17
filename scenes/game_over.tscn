@@ -94,6 +94,22 @@ Supplies dwindled, threats grew, and the region's stability began to crumble, a 
 horizontal_alignment = 1
 autowrap_mode = 2
 
+[node name="JumpedEnding" type="Label" parent="."]
+unique_name_in_owner = true
+visible = false
+offset_left = 1062.0
+offset_top = 191.0
+offset_right = 1837.0
+offset_bottom = 674.0
+theme_override_colors/font_color = Color(0.54902, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_wqhvx")
+theme_override_font_sizes/font_size = 46
+text = "Every misstep had left the Commander isolated, with no allies to protect them.
+
+When the fatal moment arrived, the walls that promised safety stood silent and empty, and the region was left abandoned, echoing the cost of errors made alone."
+horizontal_alignment = 1
+autowrap_mode = 2
+
 [node name="Buttons" type="Node2D" parent="."]
 unique_name_in_owner = true
 visible = false

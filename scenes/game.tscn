@@ -233,6 +233,16 @@ libraries = {
 [node name="Terminal" parent="Computer" instance=ExtResource("7_u5sy4")]
 unique_name_in_owner = true
 
+[node name="PauseScreen" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+layer = 10
+
+[node name="ColorRect" type="ColorRect" parent="PauseScreen"]
+z_index = -10
+offset_right = 1973.0
+offset_bottom = 1130.0
+color = Color(0, 0, 0, 1)
+
 [connection signal="exit_computer" from="." to="Computer" method="_on_game_exit_computer"]
 [connection signal="display_message" from="Hover" to="HoverMessage" method="_on_hover_display_message"]
 [connection signal="hide_message" from="Hover" to="HoverMessage" method="_on_hover_hide_message"]
