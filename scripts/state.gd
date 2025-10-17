@@ -53,3 +53,5 @@ func reset() -> void:
 	player.reputation = INITIAL_REPUTATION
 	ration_remaining = INITIAL_RATION_REMAINING
 	people_remaining = INITIAL_PEOPLE_REMAINING
+
+var INSTANT_MESSAGES := false

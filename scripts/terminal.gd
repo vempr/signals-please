@@ -405,7 +405,7 @@ func ddd() -> bool:
 
 func assess_and_display(opt: String) -> bool:
 	if opt == "c":
-		var reputation_deduction := randi_range(1, 2)
+		var reputation_deduction := randi_range(7, 9)
 		rep -= reputation_deduction
 		
 		await print_text("SIG: Indecisiveness is always frowned upon, commander. Please remember this.", C.COLORS.orange, 0.005, true)

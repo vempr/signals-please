@@ -1,0 +1,150 @@
+[gd_scene load_steps=8 format=3 uid="uid://ck32vg7yi57bv"]
+
+[ext_resource type="FontFile" uid="uid://cbi6qc2w2chwv" path="res://assets/fonts/Pixellari.ttf" id="1_gchx3"]
+[ext_resource type="Script" uid="uid://wpy7xjqiuafy" path="res://scripts/pause_screen.gd" id="1_o31j6"]
+[ext_resource type="FontFile" uid="uid://bar55wglxrc3e" path="res://assets/fonts/Pixeled.ttf" id="2_hr2n2"]
+[ext_resource type="StyleBox" uid="uid://bc8oxxejsrbsp" path="res://styles/normal_button.tres" id="3_27awe"]
+[ext_resource type="Texture2D" uid="uid://c0hlw0e2d107l" path="res://assets/images/bg.png" id="4_27awe"]
+[ext_resource type="StyleBox" uid="uid://ntsf1550r00n" path="res://styles/green_button.tres" id="4_duq8p"]
+[ext_resource type="StyleBox" uid="uid://b3v1vurd8ntg0" path="res://styles/red_button.tres" id="5_k26m1"]
+
+[node name="PauseScreen" type="CanvasLayer"]
+process_mode = 3
+layer = 10
+script = ExtResource("1_o31j6")
+
+[node name="Control" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+z_index = -10
+offset_right = 1973.0
+offset_bottom = 1130.0
+color = Color(0, 0, 0, 1)
+
+[node name="Description" type="Label" parent="Control"]
+offset_left = 1198.0
+offset_top = 26.0
+offset_right = 1898.0
+offset_bottom = 1640.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.235294)
+theme_override_fonts/font = ExtResource("1_gchx3")
+theme_override_font_sizes/font_size = 41
+text = "You are the appointed leader of an isolated region: the last functioning outpost after the network collapse.
+
+All external contact comes through your Signal Terminal, an old communications system used to vet incoming refugees, traders, and foreign officials. You decide who to let through the border.
+
+Your resources are limited: rations, security, morale. You can survive hunger longer than your people, but your reputation determines whether they continue to follow you.
+
+You must survive for ten days. After that, the N.A.L. ALLIES, the nearest surviving federation, will reach your borders to unite with your region. Until then, you stand alone, a flickering light in the dark."
+horizontal_alignment = 2
+autowrap_mode = 2
+
+[node name="MainMenuButton" type="Button" parent="Control"]
+offset_left = 49.0
+offset_top = 967.0
+offset_right = 357.0
+offset_bottom = 1049.0
+theme_override_colors/font_hover_pressed_color = Color(1, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(1, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_hr2n2")
+theme_override_font_sizes/font_size = 21
+theme_override_styles/focus = ExtResource("3_27awe")
+theme_override_styles/disabled_mirrored = ExtResource("3_27awe")
+theme_override_styles/disabled = ExtResource("3_27awe")
+theme_override_styles/hover_pressed_mirrored = ExtResource("3_27awe")
+theme_override_styles/hover_pressed = ExtResource("3_27awe")
+theme_override_styles/hover_mirrored = ExtResource("3_27awe")
+theme_override_styles/hover = ExtResource("3_27awe")
+theme_override_styles/pressed_mirrored = ExtResource("3_27awe")
+theme_override_styles/pressed = ExtResource("3_27awe")
+theme_override_styles/normal_mirrored = ExtResource("3_27awe")
+theme_override_styles/normal = ExtResource("3_27awe")
+text = "GIVE UP"
+autowrap_mode = 2
+
+[node name="ContinueButton" type="Button" parent="Control"]
+offset_left = 382.0
+offset_top = 967.0
+offset_right = 856.0
+offset_bottom = 1049.0
+theme_override_fonts/font = ExtResource("2_hr2n2")
+theme_override_font_sizes/font_size = 21
+theme_override_styles/focus = ExtResource("3_27awe")
+theme_override_styles/disabled_mirrored = ExtResource("3_27awe")
+theme_override_styles/disabled = ExtResource("3_27awe")
+theme_override_styles/hover_pressed_mirrored = ExtResource("3_27awe")
+theme_override_styles/hover_pressed = ExtResource("3_27awe")
+theme_override_styles/hover_mirrored = ExtResource("3_27awe")
+theme_override_styles/hover = ExtResource("3_27awe")
+theme_override_styles/pressed_mirrored = ExtResource("3_27awe")
+theme_override_styles/pressed = ExtResource("3_27awe")
+theme_override_styles/normal_mirrored = ExtResource("3_27awe")
+theme_override_styles/normal = ExtResource("3_27awe")
+text = "CONTINUE"
+autowrap_mode = 2
+
+[node name="Title" type="Label" parent="Control"]
+offset_left = 50.0
+offset_top = -7.0
+offset_right = 742.0
+offset_bottom = 179.0
+theme_override_fonts/font = ExtResource("2_hr2n2")
+theme_override_font_sizes/font_size = 56
+text = "Signals, Please!"
+
+[node name="EnableInstantMessagesButton" type="Button" parent="Control"]
+unique_name_in_owner = true
+offset_left = 54.0
+offset_top = 150.0
+offset_right = 728.0
+offset_bottom = 200.0
+theme_override_fonts/font = ExtResource("1_gchx3")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = ExtResource("4_duq8p")
+theme_override_styles/hover_pressed_mirrored = ExtResource("4_duq8p")
+theme_override_styles/hover_pressed = ExtResource("4_duq8p")
+theme_override_styles/hover_mirrored = ExtResource("4_duq8p")
+theme_override_styles/hover = ExtResource("4_duq8p")
+theme_override_styles/pressed_mirrored = ExtResource("4_duq8p")
+theme_override_styles/pressed = ExtResource("4_duq8p")
+theme_override_styles/normal_mirrored = ExtResource("4_duq8p")
+theme_override_styles/normal = ExtResource("4_duq8p")
+text = "Enable Instant Messages (No Typing Animations)"
+
+[node name="DisableInstantMessagesButton" type="Button" parent="Control"]
+unique_name_in_owner = true
+offset_left = 54.0
+offset_top = 208.0
+offset_right = 728.0
+offset_bottom = 258.0
+theme_override_fonts/font = ExtResource("1_gchx3")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = ExtResource("5_k26m1")
+theme_override_styles/hover_pressed_mirrored = ExtResource("5_k26m1")
+theme_override_styles/hover_pressed = ExtResource("5_k26m1")
+theme_override_styles/hover_mirrored = ExtResource("5_k26m1")
+theme_override_styles/hover = ExtResource("5_k26m1")
+theme_override_styles/pressed_mirrored = ExtResource("5_k26m1")
+theme_override_styles/pressed = ExtResource("5_k26m1")
+theme_override_styles/normal_mirrored = ExtResource("5_k26m1")
+theme_override_styles/normal = ExtResource("5_k26m1")
+disabled = true
+text = "Disable Instant Messages (Typing Animations)"
+
+[node name="Bg" type="Sprite2D" parent="Control"]
+position = Vector2(630, 605)
+scale = Vector2(3.64, 3.64)
+texture = ExtResource("4_27awe")
+
+[connection signal="pressed" from="Control/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
+[connection signal="pressed" from="Control/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="button_down" from="Control/EnableInstantMessagesButton" to="." method="_on_enable_instant_messages_button_button_down"]
+[connection signal="button_down" from="Control/DisableInstantMessagesButton" to="." method="_on_disable_instant_messages_button_button_down"]

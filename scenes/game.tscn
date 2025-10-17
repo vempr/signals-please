@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://6n1jus564k5r"]
+[gd_scene load_steps=18 format=3 uid="uid://6n1jus564k5r"]
 
 [ext_resource type="Script" uid="uid://ds3swgv6c3agv" path="res://scripts/game.gd" id="1_iywne"]
 [ext_resource type="PackedScene" uid="uid://ya74x22r2oq" path="res://scenes/hover_message.tscn" id="1_lnu2h"]
@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://b2cj4fxkshutk" path="res://assets/sfx/eat.wav" id="4_lbhrr"]
 [ext_resource type="Script" uid="uid://ced1cvx7qs54e" path="res://scripts/computer.gd" id="6_p57ef"]
 [ext_resource type="PackedScene" uid="uid://ca1qwxe2wemin" path="res://scenes/terminal.tscn" id="7_u5sy4"]
+[ext_resource type="PackedScene" uid="uid://ck32vg7yi57bv" path="res://scenes/pause_screen.tscn" id="8_gee14"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iywne"]
 size = Vector2(423, 150)
@@ -112,6 +113,7 @@ _data = {
 }
 
 [node name="Game" type="Node2D"]
+process_mode = 1
 script = ExtResource("1_iywne")
 
 [node name="HoverMessage" parent="." instance=ExtResource("1_lnu2h")]
@@ -233,15 +235,8 @@ libraries = {
 [node name="Terminal" parent="Computer" instance=ExtResource("7_u5sy4")]
 unique_name_in_owner = true
 
-[node name="PauseScreen" type="CanvasLayer" parent="."]
+[node name="PauseScreen" parent="." instance=ExtResource("8_gee14")]
 unique_name_in_owner = true
-layer = 10
-
-[node name="ColorRect" type="ColorRect" parent="PauseScreen"]
-z_index = -10
-offset_right = 1973.0
-offset_bottom = 1130.0
-color = Color(0, 0, 0, 1)
 
 [connection signal="exit_computer" from="." to="Computer" method="_on_game_exit_computer"]
 [connection signal="display_message" from="Hover" to="HoverMessage" method="_on_hover_display_message"]
