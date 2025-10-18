@@ -13,9 +13,9 @@ const DECREASE_AFTER_EATING = 10
 
 const sig_intro_1 = "SIG: Good morning, Commander. The night patrols found two bodies near the perimeter fence. Starvation. Not our people, outsiders. They must have come from the southern wastelands."
 const sig_intro_2 = "SIG: We'll get more requests today. Traders, refugees, deserters. The law says to deny anyone without clearance. The people say we need allies."
-const sig_intro_3 = "SIG: Ultimately, it's your call. Each signal comes with a risk. Let the wrong one in and your rations run dry, or worse, your people turn on you. It is your task to spot any questionable 'signals' in the requests that we receive. Look out for request data, corrupted characters, strange syntax/phrasing, or transmission noise."
+const sig_intro_3 = "SIG: Ultimately, it's your call. Each signal comes with a risk. Let the wrong one in and your rations run dry, or worse, your people turn on you. It is your task to spot any questionable 'signals' in the requests that we receive. Look out for request data, strange phrasing, or transmission noise."
 
-const MESSAGES = {
+var MESSAGES = {
 	"incoming_signal": "[b]\n\n--------------------\nINCOMING SIGNAL...\nTYPE 'r' TO RECEIVE.\n--------------------\n\n[/b]",
 	"SIG": {
 		"introduction": [sig_intro_1, sig_intro_2, sig_intro_3]
@@ -210,10 +210,82 @@ const MESSAGES = {
 						"Three cycles later, beacon goes dark."
 					]
 				}
-			}
+			},
+			{
+			"message_content": "Ironvale Command, this is Elder Koll from the Ridgepoint settlement. Our food stores are down to roots and boiled leather. The children haven't eaten proper meal in three days. We held out as long as we could, but the soil turned sour and the last hunting party never returned. We're peaceful people, just farmers and craftsmen. We'll abide by your laws, work your fields, whatever you ask. Don't let our lineage end here in the cold.",
+				"a": {
+					"decision": "Dispatch emergency rations and medical aid to their location.",
+					"reaction": [
+						"Elder Koll's voice trembles: 'Bless you, Commander. We will remember this kindness.'",
+						"Two days later: Settlement reports first successful harvest in months."
+					]
+				},
+				"b": {
+					"decision": "Deny assistance, citing limited resources for outsiders.",
+					"reaction": [
+						"Long silence, then: 'We understand. May your walls never know our hunger.'",
+						"Satellite imagery shows abandoned settlement within the week."
+					]
+				},
+				"c": {
+					"decision": "Mark their coordinates for future observation only.",
+					"reaction": [
+						"'We'll... wait then. Thank you for considering.'",
+						"Signal degrades over following days until only static remains."
+					]
+				}
+			},
 		],
 
 		MESSAGE_TYPE.PROVIDE_FOOD: [
+			{
+				"message_content": "Commander, this is Trader Valerius from the Green Valley Caravan. We've had an unexpected surplus from the hydroponic gardens—fresh vegetables and preserved grains. We remember Ironvale's help during the flood season and want to repay the debt. We can deliver enough to supplement your stores for a week. Just grant us safe passage through the western corridor.",
+				"a": {
+					"decision": "Accept the offering and provide armed escort through the territory.",
+					"reaction": [
+						"'Excellent! The carts are already loaded and rolling your way.'",
+						"Fresh produce boosts morale and provides essential nutrients."
+					]
+				},
+				"b": {
+					"decision": "Decline, suspecting potential ambush or ulterior motives.",
+					"reaction": [
+						"'Your caution is... noted. The offer stands if you change your mind.'",
+						"Later intelligence confirms caravan was legitimate. Opportunity lost."
+					]
+				},
+				"c": {
+					"decision": "Request they leave supplies at neutral location for pickup.",
+					"reaction": [
+						"'Understood. We'll deposit at the old watchtower as requested.'",
+						"Supplies retrieved without incident, though some perishables spoiled."
+					]
+				}
+			},
+			{
+				"message_content": "Ironvale Command, Dr. Chen here from the Agricultural Research Station. We've successfully stabilized the high-yield grain variant and can share the seeds and cultivation data. This strain grows in poor soil with minimal water. We're not asking for anything in return—just want to ensure the knowledge survives. The future food security of the region depends on this.",
+				"a": {
+					"decision": "Eagerly accept the seeds and research data.",
+					"reaction": [
+						"'Transmitting data packets now. May these seeds feed generations.'",
+						"New grain strain increases future harvest yields by 40%."
+					]
+				},
+				"b": {
+					"decision": "Refuse, fearing genetically modified organisms could destabilize ecosystem.",
+					"reaction": [
+						"'I respect your caution, but history may judge this decision harshly.'",
+						"Station destroyed in subsequent storms. Knowledge lost forever."
+					]
+				},
+				"c": {
+					"decision": "Accept seeds but quarantine them for extensive testing.",
+					"reaction": [
+						"'Prudent as always, Commander. We'll await your results.'",
+						"Six-month delay in implementation, but safety confirmed."
+					]
+				}
+			},
 			{
 				"message_content": "Commander, I'm Renn of the merchant roads. I scavenged a few sealed crates from an old depot-nutrient paste, labeled human-grade. Some hissed when I opened them, but I've been eating it. Still alive. I can trade half my stock for a night's shelter and protection. It's not much, but it could feed Ironvale through the frost. Let me in, Commander. I'm tired of sleeping with one eye open.",
 				"a": {
@@ -262,6 +334,54 @@ const MESSAGES = {
 
 		MESSAGE_TYPE.NEED_HELP: [
 			{
+				"message_content": "Mayday, mayday! This is Captain Reyne of the Northern Watch. Our outpost was overrun by scavengers—they took everything edible. Half my unit is wounded, and we're down to melting snow for water. We held this post for Ironvale through the worst of it, but now... we're watching our own people starve. We just need enough to get back to base. Don't leave your own soldiers out here to die.",
+				"a": {
+					"decision": "Immediately send provisions and extraction team.",
+					"reaction": [
+						"'Command acknowledges! Hold position, Reyne out.'",
+						"Unit returns intact, morale restored. Loyalty secured."
+					]
+				},
+				"b": {
+					"decision": "Deny support, considering them already lost.",
+					"reaction": [
+						"'So this is how Ironvale rewards loyalty... understood.'",
+						"Last transmission: gunfire in background, then eternal static."
+					]
+				},
+				"c": {
+					"decision": "Promise help that may never arrive to maintain hope.",
+					"reaction": [
+						"'Help is coming, just hold on a little longer.'",
+						"They hold out for three more days before silence falls."
+					]
+				}
+			},
+			{
+				"message_content": "Emergency broadcast from Westgate Settlement! Our water purification system has failed and sickness is spreading. We've lost three elders and two children to the fever already. Our medic is among the sick. We need medical supplies, clean water, and technical support urgently. We can offer future labor and loyalty in return. Please, don't let us drown in our own filth.",
+				"a": {
+					"decision": "Dispatch medical team and engineers with emergency supplies.",
+					"reaction": [
+						"'The drones! They're here! Thank the stars!'",
+						"Epidemic contained. Settlement becomes loyal ally."
+					]
+				},
+				"b": {
+					"decision": "Quarantine the area, denying all entry and exit.",
+					"reaction": [
+						"'You're sealing our fate? May you never know such abandonment.'",
+						"Settlement goes silent within days. No survivors."
+					]
+				},
+				"c": {
+					"decision": "Send basic medical supplies but no personnel.",
+					"reaction": [
+						"'It's something... we'll make it work. Thank you.'",
+						"Half the settlement survives, but resentment lingers."
+					]
+				}
+			},
+			{
 				"message_content": "Commander, this is Rask. The reactor conduit ruptured. I've sealed what I can, but pressure's building fast. The heat's climbing, and the suits are starting to melt. I can't stop it without new couplers or remote access from your end. If this goes, your silos burn with us. Please, authorize an override-or finish it clean. Just don't let me die waiting.",
 				"a": {
 					"decision": "Send a maintenance drone and authorize remote override.",
@@ -306,6 +426,54 @@ const MESSAGES = {
 		],
 
 		MESSAGE_TYPE.PROVIDE_HELP: [
+			{
+				"message_content": "Commander, this is Engineer Torres from the Free Mechanics Guild. We've detected structural weaknesses in your northeastern perimeter wall that could fail under heavy assault. We have specialized equipment and expertise to reinforce it properly. No payment required—strong walls protect everyone. Just grant us temporary access and basic security clearance.",
+				"a": {
+					"decision": "Accept their expertise and provide necessary access.",
+					"reaction": [
+						"'Excellent! Our teams will begin work at first light.'",
+						"Walls reinforced. Future attacks repelled with minimal damage."
+					]
+				},
+				"b": {
+					"decision": "Refuse, fearing they might plant surveillance or sabotage.",
+					"reaction": [
+						"'Your paranoia may cost you dearly, Commander.'",
+						"Next storm causes wall collapse. Three guards lost."
+					]
+				},
+				"c": {
+					"decision": "Accept help but assign guards to monitor every move.",
+					"reaction": [
+						"'Understood. We work well under observation.'",
+						"Repairs completed efficiently, though atmosphere remains tense."
+					]
+				}
+			},
+			{
+				"message_content": "Ironvale Command, this is Scholar Elara from the Archive Preservation Society. We've recovered pre-collapse engineering schematics for efficient power distribution that could double your energy output. We're willing to share this knowledge in exchange for digital storage space to preserve our cultural records. The past shouldn't die so the future can live.",
+				"a": {
+					"decision": "Gladly exchange storage space for the valuable schematics.",
+					"reaction": [
+						"'Knowledge preserved and shared. A true victory for civilization.'",
+						"Power grid efficiency dramatically improved. Blackouts eliminated."
+					]
+				},
+				"b": {
+					"decision": "Decline, prioritizing practical needs over historical preservation.",
+					"reaction": [
+						"'So progress requires cultural annihilation. Noted.'",
+						"Schematics lost when archive damaged in subsequent conflict."
+					]
+				},
+				"c": {
+					"decision": "Offer limited storage in exchange for partial data access.",
+					"reaction": [
+						"'A compromise, but better than nothing. Sending data now.'",
+						"Moderate power improvements achieved. Some history preserved."
+					]
+				}
+			},
 			{
 				"message_content": "Commander, name's Dr. Eyr. I've been tending the plague remnants across the valley. Supplies are low, but my hands are steady. I'm asking to work within your walls-set up a small clinic, patch your workers, maybe your soldiers. I don't carry the sickness; I carry the cure. Trust me, and I'll prove it.",
 				"a": {
@@ -402,230 +570,406 @@ const MESSAGES = {
 	"fake": {
 		MESSAGE_TYPE.NEED_FOOD: [
 			{
-				"message_content": "Commander, I am Kael from the eastern sectors. My food synthesizer malfunctioned three days ago and I haven't eaten since. The repair drones keep passing by without stopping. I can offer technical schematics for access to your nutrition bay. My hunger is becoming distracting.",
+				"message_content": "Commander, I am Unit 734 from agricultural sector gamma. My nutrient intake has been below optimal levels for 72.3 hours. Processing efficiency decreasing by 2.1% per cycle. Request immediate caloric transfer to maintain operational parameters. Will exchange diagnostic data for sustenance.",
 				"a": {
-					"decision": "Grant limited access to nutrition bay in exchange for schematics.",
+					"decision": "Authorize food transfer in exchange for diagnostic data.",
 					"reaction": [
-						"'Access granted. Transmitting files now.'",
-						"Later: 'The schematics appear to be public domain archives from pre-collapse databases.'"
+						"'Calories accepted. Transmitting diagnostic patterns now.'",
+						"Data reveals repeating binary sequences. No useful agricultural information found."
 					]
 				},
 				"b": {
-					"decision": "Deny request and flag for security review.",
+					"decision": "Deny request and flag as potential system malfunction.",
 					"reaction": [
-						"'Understood. I'll... find another way.' Transmission ends abruptly."
+						"'Query: Why do organic units receive priority?' Signal terminates abruptly."
 					]
 				},
 				"c": {
-					"decision": "Monitor situation without response.",
+					"decision": "Research agricultural sector gamma's current status.",
 					"reaction": [
-						"Signal continues broadcasting identical message every 2.7 hours exactly."
+						"Records show agricultural sector gamma was fully automated with robotic systems 5 years ago. No biological units assigned."
 					]
 				}
 			},
 			{
-				"message_content": "This is Jora. The soil in my sector turned acidic last week. All my crops withered overnight. I'm down to my emergency reserves, but they're running low. If Ironvale could spare any seeds or soil neutralizers, I'd be grateful. I used to supply your western quadrant before the contamination.",
+				"message_content": "This is Lia from the twilight settlement. Our food synthesizers are producing only blue-colored nutrient paste. The children are afraid to eat it. We need emergency rations immediately. The blue paste seems to be... watching us. Can you send normal food?",
 				"a": {
-					"decision": "Dispatch agricultural aid package to Jora's coordinates.",
+					"decision": "Dispatch emergency food supplies to assist settlement.",
 					"reaction": [
-						"'Package received. The soil compounds seem... familiar.'",
-						"Two days later: 'Growth rates are abnormal. The plants are moving.'"
+						"'The delivery is here! Wait... this tastes like yesterday's rations.'",
+						"Follow-up investigation finds settlement abandoned for months. Blue mold everywhere."
 					]
 				},
 				"b": {
-					"decision": "Refuse assistance due to resource constraints.",
+					"decision": "Refuse and recommend technical support for synthesizers.",
 					"reaction": [
-						"'Then we all starve together.' Signal cuts with unusual finality."
+						"'But the blue tastes like memories...' Transmission dissolves into static laughter."
 					]
 				},
 				"c": {
-					"decision": "Research Jora's claims before responding.",
+					"decision": "Check settlement database for recent activity.",
 					"reaction": [
-						"Archives show western quadrant was automated hydroponics for 12 years. No human suppliers registered."
+						"Twilight settlement was evacuated during the 'Chromium Bloom' contamination event 11 months ago. No life signs detected."
+					]
+				}
+			},
+			{
+				"message_content": "Greetings Commander. I am a photosynthesis-capable human from the Sun-Dweller colony. Our solar collectors have been stolen by shadow creatures. I require emergency carbohydrate supplements until we rebuild. In return, I can teach your people to photosynthesize. The process only requires minor genetic adjustments and standing still for 8 hours daily.",
+				"a": {
+					"decision": "Provide food and begin photosynthesis training program.",
+					"reaction": [
+						"'Excellent! Soon your people will taste sunlight.'",
+						"Volunteers develop green skin pigmentation but show no reduction in food requirements. Sunburn incidents increase 300%."
+					]
+				},
+				"b": {
+					"decision": "Decline and question biological claims.",
+					"reaction": [
+						"'Your skepticism blocks human evolution. We will find more enlightened partners.'"
+					]
+				},
+				"c": {
+					"decision": "Research Sun-Dweller colony existence.",
+					"reaction": [
+						"No records of photosynthesis-capable humans. Solar collector technology doesn't exist in described form. 'Shadow creatures' match description from children's educational horror stories."
+					]
+				}
+			},
+			{
+				"message_content": "My food replicator has developed sentience and refuses to make anything but lime gelatin. It claims the gelatin is plotting against us. I'm afraid to eat it but I'm starving. The lime gelatin keeps arranging itself into threatening shapes. Please send non-sentient food immediately.",
+				"a": {
+					"decision": "Dispatch emergency rations and technical support.",
+					"reaction": [
+						"'The regular food is here! The gelatin seems... disappointed.'",
+						"Technical team finds normal replicator. User appears to have been eating only gelatin for weeks by choice."
+					]
+				},
+				"b": {
+					"decision": "Deny assistance for psychological evaluation priority.",
+					"reaction": [
+						"'But the gelatin is forming armies! Fine, I'll eat the yellow gelatin instead.'"
+					]
+				},
+				"c": {
+					"decision": "Check replicator model capabilities.",
+					"reaction": [
+						"Replicator model mentioned has no AI components. Gelatin sentience physically impossible according to food science division."
 					]
 				}
 			}
 		],
 		MESSAGE_TYPE.PROVIDE_FOOD: [
 			{
-				"message_content": "Commander, I've discovered a cache of pre-collapse military rations in an underground bunker. The seals are intact, expiration dates unclear. I'm willing to trade for medical supplies. The coordinates are encrypted, but I'll transmit upon agreement. These could feed fifty people for months.",
+				"message_content": "Commander! We've discovered edible mushrooms growing in the old ventilation shafts. They glow in the dark and taste like happiness. Willing to trade basket for medical scanner. The mushrooms whisper coordinates to other food caches. Don't you want to know where they are?",
 				"a": {
-					"decision": "Accept trade and prepare medical supplies for exchange.",
+					"decision": "Accept mushroom trade for medical scanner.",
 					"reaction": [
-						"'Coordinates incoming. You won't regret this.'",
-						"Scout team finds empty bunker with recent excavation marks. No rations detected."
+						"'The mushrooms are pleased with this exchange.'",
+						"Mushrooms exhibit bioluminescent pulsing. Several personnel report vivid dreams and increased suggestibility."
 					]
 				},
 				"b": {
-					"decision": "Reject offer due to questionable food safety.",
+					"decision": "Reject offer and quarantine mentioned ventilation areas.",
 					"reaction": [
-						"'Your loss. I'll find someone who appreciates history.'"
+						"'The mushrooms are disappointed. They will find more receptive hosts.'"
 					]
 				},
 				"c": {
-					"decision": "Scan coordinates before committing to trade.",
+					"decision": "Analyze mushroom samples before committing to trade.",
 					"reaction": [
-						"Remote sensors detect high radiation levels at location. Area marked hazardous."
+						"Lab analysis reveals fungal spores with mild psychotropic properties. Species matches 'Luminous Suggestus' from pre-collapse bio-weapons research."
 					]
 				}
 			},
 			{
-				"message_content": "I operate a functional aquaculture facility north of your position. We have surplus fish protein available for trade. Our systems are stable, but we need replacement filters. I can deliver within 48 hours if you provide the filters. The fish are... unusually large but nutritious.",
+				"message_content": "I represent the Culinary Preservation Society. We have recovered 50 kilos of pre-collapse chocolate bars. Still in original wrappers, best before dates unclear. Seeking trading partners for cultural exchange. Chocolate makes the world go round, doesn't it?",
 				"a": {
-					"decision": "Arrange filter exchange for fish delivery.",
+					"decision": "Arrange trade for the chocolate bars.",
 					"reaction": [
-						"'Delivery en route. You'll find the specimens quite remarkable.'",
-						"Cargo contains oversized, aggressive fish with abnormal bioluminescence."
+						"'Delighted to do business! The chocolate remembers sweet times.'",
+						"Bars arrive with 80-year-old expiration dates. Chemical analysis reveals advanced crystallization but safe consumption."
 					]
 				},
 				"b": {
-					"decision": "Decline due to concerns about biological contamination.",
+					"decision": "Decline due to questionable food safety.",
 					"reaction": [
-						"'Suit yourself. More for the northern clans.'"
+						"'Your loss. The chocolate will find more appreciative palates.'"
 					]
 				},
 				"c": {
-					"decision": "Research northern water sources before responding.",
+					"decision": "Research Culinary Preservation Society records.",
 					"reaction": [
-						"Satellite imagery shows all northern lakes frozen solid for 8 months annually."
+						"No such organization in archives. Last chocolate production facility destroyed 45 years ago in the Sweet Wars."
+					]
+				}
+			},
+			{
+				"message_content": "We harvest exotic meats from creatures that live in radio static. The meat tastes like your favorite memory and never spoils. Trading for replacement vacuum tubes. Warning: consumption may cause temporary ability to hear colors. Perfectly normal side effect.",
+				"a": {
+					"decision": "Trade vacuum tubes for exotic static-meat.",
+					"reaction": [
+						"'The static approves of this exchange.'",
+						"Meat appears to be normal poultry. Personnel report synesthesia symptoms and craving for broadcast signals."
+					]
+				},
+				"b": {
+					"decision": "Reject due to food safety concerns.",
+					"reaction": [
+						"'Your culinary experiences will remain tragically limited to reality.'"
+					]
+				},
+				"c": {
+					"decision": "Analyze meat composition and origin.",
+					"reaction": [
+						"Samples test as common chicken. 'Radio static creatures' not found in any biological database. Source appears to be local poultry farm."
+					]
+				}
+			},
+			{
+				"message_content": "I've developed bread that toasts itself when hungry people approach. The crust contains mood-enhancing nanites. Seeking distribution partners. Note: bread sometimes offers unsolicited life advice. Mostly good advice though.",
+				"a": {
+					"decision": "Accept distribution deal for self-toasting bread.",
+					"reaction": [
+						"'The bread is eager to meet your people!'",
+						"Bread works as advertised but develops cult following. Several personnel found having deep conversations with food items."
+					]
+				},
+				"b": {
+					"decision": "Decline sentient food products.",
+					"reaction": [
+						"'Your loss. The bread says you're making a mistake, for what it's worth.'"
+					]
+				},
+				"c": {
+					"decision": "Research food nanotechnology regulations.",
+					"reaction": [
+						"Food nanites banned after 'The Great Carb Uprising' where pastries organized workers' rights movements."
 					]
 				}
 			}
 		],
 		MESSAGE_TYPE.NEED_HELP: [
 			{
-				"message_content": "Commander, our atmospheric processor is overloading. The safety systems aren't responding. I'm the only technician still conscious. If you don't send help within the hour, the entire sector will lose breathable air. I've tried everything I know. Please, I'm begging you.",
+				"message_content": "EMERGENCY: Our settlement's gravity generator is failing. Objects floating everywhere. People stuck on ceilings. Can't reach the controls. Estimated 3 hours until atmospheric containment fails. Send engineers who aren't afraid of heights! Bring tethers!",
 				"a": {
-					"decision": "Dispatch emergency engineering team immediately.",
+					"decision": "Dispatch emergency engineering team with zero-g equipment.",
 					"reaction": [
-						"'They're here! Thank you, Commander!'",
-						"Team reports facility abandoned, systems operating normally at 87% efficiency."
+						"'We see your ships! Hurry, the cats are floating into the ventilation!'",
+						"Team finds settlement operating normally. Residents confused by emergency response."
 					]
 				},
 				"b": {
-					"decision": "Deny assistance due to distance and resource cost.",
+					"decision": "Deny assistance, prioritize critical infrastructure.",
 					"reaction": [
-						"'So this is how it ends.' Transmission continues normally for 72+ hours."
+						"'Guess we'll just... float away then.' Normal status reports resume next day."
 					]
 				},
 				"c": {
-					"decision": "Monitor atmospheric readings from target sector.",
+					"decision": "Scan settlement for gravitational anomalies.",
 					"reaction": [
-						"Remote sensors show stable, optimal air quality readings throughout alleged crisis."
+						"Sensor data shows perfect 1G stability for past 6 months. No gravity generator installed at location."
 					]
 				}
 			},
 			{
-				"message_content": "This is Lieutenant Mara from Outpost Gamma. We're under attack by unknown hostiles. Our defenses are failing. I'm the only command staff still active. Request immediate military support or evacuation. They're breaking through the perimeter as I speak!",
+				"message_content": "Code Violet! Our medical bay is experiencing temporal fluctuations. Patients aging rapidly and then reversing. Doctor just became a medical student again. Send chrono-stabilization equipment immediately! Also, we're out of bandages.",
 				"a": {
-					"decision": "Send rapid response unit to Outpost Gamma.",
+					"decision": "Send specialized equipment and medical supplies.",
 					"reaction": [
-						"'Reinforcements spotted! Hold the line!'",
-						"Response team finds outpost deserted, no signs of struggle. Systems powered down gracefully."
+						"'The equipment is here! Wait, didn't we already do this?'",
+						"Medical team reports normal conditions. Staff claims no memory of emergency call."
 					]
 				},
 				"b": {
-					"decision": "Deny support, citing defense protocol priorities.",
+					"decision": "Deny request, citing impossibility of temporal events.",
 					"reaction": [
-						"'Understood. Going dark.' Signal continues broadcasting routine status updates."
+						"'But it's happening! I can feel myself getting younger! Oh, actually that's nice.'"
 					]
 				},
 				"c": {
-					"decision": "Verify Outpost Gamma's status through military channels.",
+					"decision": "Check medical bay's equipment and recent reports.",
 					"reaction": [
-						"Records indicate Outpost Gamma was decommissioned and abandoned 4 years ago."
+						"Facility records show routine operations. No temporal technology present. Last inspection: 2 days ago, all normal."
+					]
+				}
+			},
+			{
+				"message_content": "EMERGENCY: Our settlement's doors have started judging us. They won't open for people they deem 'unworthy.' The bathroom door just rejected me for 'lack of life ambition.' We're trapped in rooms! Send help before the front door develops political opinions!",
+				"a": {
+					"decision": "Dispatch emergency demolition and counseling teams.",
+					"reaction": [
+						"'The teams are here! The main door says they have excellent career potential!'",
+						"Doors found to be normal. Settlement residents undergoing group therapy for collective delusion."
+					]
+				},
+				"b": {
+					"decision": "Deny assistance for architectural therapy.",
+					"reaction": [
+						"'The kitchen door says you lack compassion! It's not wrong!' Transmission continues with door complaints."
+					]
+				},
+				"c": {
+					"decision": "Check door manufacturer and AI capabilities.",
+					"reaction": [
+						"Doors are basic mechanical models with no AI components. Settlement psychologist notes pattern of projection issues among residents."
+					]
+				}
+			},
+			{
+				"message_content": "Our water supply has developed dramatic timing. It only flows during emotional moments. We're dehydrated but having great personal revelations. Can you send normal water and maybe a therapist? The water just told me my father was proud of me before cutting out again.",
+				"a": {
+					"decision": "Send water tankers and mental health support.",
+					"reaction": [
+						"'The normal water is here! It's so... emotionally stable.'",
+						"Water system found to have simple timer malfunction. Residents appear well-hydrated but emotionally drained."
+					]
+				},
+				"b": {
+					"decision": "Deny, prioritize practical infrastructure fixes.",
+					"reaction": [
+						"'But the water was about to reveal my true purpose! Fine, we'll fix it ourselves.'"
+					]
+				},
+				"c": {
+					"decision": "Analyze water supply monitoring data.",
+					"reaction": [
+						"Water flow records show consistent patterns matching scheduled maintenance, not emotional states. Psychological evaluation recommended for settlement leader."
 					]
 				}
 			}
 		],
 		MESSAGE_TYPE.PROVIDE_HELP: [
 			{
-				"message_content": "Commander, I represent a group of engineers who've developed a revolutionary power source. It could triple Ironvale's energy output. We need sanctuary and workshop space. In return, we'll install the system free of charge. The technology is... unconventional but proven.",
+				"message_content": "We are the Memory Weavers Guild. We can install dream-enhancement technology in your sleep chambers. Your people will wake up remembering skills they never learned! Languages! Engineering! Cooking! Minor side effect: occasional reality confusion. Small price for knowledge!",
 				"a": {
-					"decision": "Grant sanctuary and allocate workshop resources.",
+					"decision": "Authorize dream-enhancement installation.",
 					"reaction": [
-						"'We begin immediately. Your faith will be rewarded.'",
-						"Energy fluctuations detected across grid. Systems reporting 'ghost loads' and unexplained drain."
+						"'The dreams begin tonight! Sweet knowledge, Commander.'",
+						"Personnel report vivid dreams but no skill acquisition. Several complain of 'memory bleed' from unknown sources."
 					]
 				},
 				"b": {
-					"decision": "Refuse due to security concerns about unknown technology.",
+					"decision": "Reject due to psychological safety concerns.",
 					"reaction": [
-						"'Your caution will be your downfall, Commander.'"
+						"'Your dreams will remain ordinary. How sad for you.'"
 					]
 				},
 				"c": {
-					"decision": "Request demonstration before granting access.",
+					"decision": "Research Memory Weavers Guild background.",
 					"reaction": [
-						"'Impossible without proper facilities. The offer expires in 24 hours.'"
+						"No guild registration found. Similar technology banned after 'The Great Confusion' incident where citizens forgot how to breathe automatically."
 					]
 				}
 			},
 			{
-				"message_content": "I am Dr. Silas, formerly of the Bio-Recovery Initiative. I have developed a serum that enhances human endurance and reduces sleep requirements by 70%. I need test subjects and laboratory access. The results could give Ironvale a significant advantage. The side effects are... manageable.",
+				"message_content": "I've invented a device that translates animal thoughts into human language. Your security dogs could report intruders! Your settlement cats could coordinate pest control! The mice... well, you might not want to know what the mice think. Seeking testing partners.",
 				"a": {
-					"decision": "Approve testing program and volunteer subjects.",
+					"decision": "Volunteer as testing site for animal translator.",
 					"reaction": [
-						"'Excellent. Send the first subjects immediately.'",
-						"Volunteers report increased energy but developing photosensitivity and unusual vocal patterns."
+						"'Excellent! The animals have much to say.'",
+						"Dogs mostly think about food. Cats plot domination. Mice discuss cheese heists. Productivity decreases as personnel engage in lengthy animal conversations."
 					]
 				},
 				"b": {
-					"decision": "Reject due to ethical concerns and unknown risks.",
+					"decision": "Decline, concerned about practical applications.",
 					"reaction": [
-						"'Progress requires sacrifice, Commander. Your people will remain limited.'"
+						"'Your ignorance will be your undoing. The squirrels are watching.'"
 					]
 				},
 				"c": {
-					"decision": "Research Dr. Silas's credentials before considering.",
+					"decision": "Review inventor's credentials and previous work.",
 					"reaction": [
-						"Bio-Recovery Initiative records show Dr. Silas was dismissed for unethical experimentation 9 years ago."
+						"Inventor previously banned from three settlements for 'disruptive interspecies communications' and 'causing poultry unionization attempts.'"
+					]
+				}
+			},
+			{
+				"message_content": "I can install laughter-powered generators in your settlement. They convert humor into electricity! The more people laugh, the more power you get. Side effects may include compulsive joke-telling and decreased seriousness during emergencies. Worth it for free power!",
+				"a": {
+					"decision": "Install laughter-powered energy system.",
+					"reaction": [
+						"'The generators are in! Let the hilarity commence!'",
+						"Power output minimal. Settlement becomes known for terrible puns. Emergency drills now feature comedy routines."
+					]
+				},
+				"b": {
+					"decision": "Reject due to reliability concerns.",
+					"reaction": [
+						"'Your power bills will remain tragically unfunny.'"
+					]
+				},
+				"c": {
+					"decision": "Research energy conversion principles.",
+					"reaction": [
+						"Laughter-to-energy technology theoretically impossible. Previous attempts resulted in 'The Giggle Grid Collapse' where entire city laughed themselves powerless."
+					]
+				}
+			},
+			{
+				"message_content": "I've perfected a system that turns bureaucracy into clean energy. Your paperwork will power the settlement! Forms generate more power when filled out correctly. Meetings become power plants! Finally, motivation for efficient administration!",
+				"a": {
+					"decision": "Implement bureaucracy power system.",
+					"reaction": [
+						"'The paperwork begins! Feel the power of compliance!'",
+						"Administrative efficiency increases dramatically but actual power generation negligible. Staff develop strange attraction to form-filling."
+					]
+				},
+				"b": {
+					"decision": "Decline as impractical fantasy.",
+					"reaction": [
+						"'Your lack of vision is... properly documented in triplicate.'"
+					]
+				},
+				"c": {
+					"decision": "Check inventor's credentials and previous work.",
+					"reaction": [
+						"Inventor previously hospitalized for 'extreme administrative enthusiasm' and attempting to power a toaster with tax returns."
 					]
 				}
 			}
 		],
 		MESSAGE_TYPE.FOOD_SERVICE: [
 			{
-				"message_content": "AUTOMATED NOTICE: Your nutrition paste allocation has been upgraded to premium grade. Enhanced flavor profiles and 15% increased nutritional value. Please acknowledge to receive shipment. Note: Some recipients report temporary visual disturbances during metabolic adjustment period.",
+				"message_content": "ATTENTION: Mandatory taste bud upgrade required for all personnel. New nutrient paste formulas optimized for enhanced palatability. Upgrade will be delivered via aerosol dispersion during sleep cycle. Non-compliance may result in... taste-related dissatisfaction.",
 				"a": {
-					"decision": "Acknowledge and schedule premium shipment receipt.",
+					"decision": "Authorize the taste bud upgrade program.",
 					"reaction": [
-						"Shipment arrives with mismatched labeling. Paste appears identical to standard issue.",
-						"Medical reports 8% increase in mild hallucinations among consumers."
+						"'Dispersion initiated. Your food will taste different tomorrow.'",
+						"Personnel report all food now tastes like lavender and static electricity. Morale mixed."
 					]
 				},
 				"b": {
-					"decision": "Decline upgrade and maintain current supply contract.",
+					"decision": "Reject unauthorized biological modifications.",
 					"reaction": [
-						"Notice repeats three times with increasing urgency, then ceases."
+						"'Your conservative taste buds will limit your culinary experiences.' Notice repeats with increasing floral scent from speakers."
 					]
 				},
 				"c": {
-					"decision": "Verify upgrade with central supply authority.",
+					"decision": "Verify upgrade with health administration.",
 					"reaction": [
-						"Central authority has no record of premium paste program. Notice origin untraceable."
+						"No such program authorized. Aerosol traced to abandoned perfume factory. Notice source: unknown."
 					]
 				}
 			},
 			{
-				"message_content": "URGENT: Ration redistribution required by Sector Directive 7-Alpha. Ironvale-9 designated as redistribution hub. Prepare to receive 200% standard allocation for temporary storage. Acknowledge compliance to maintain preferred status. Storage duration: indefinite.",
+				"message_content": "URGENT RECALL: All ration packs from batch 7X3-Gamma contain excess empathy compounds. Consumers may experience heightened emotional responses to food waste. Return affected rations for neutralization. Do not consume if you feel sorry for uneaten vegetables.",
 				"a": {
-					"decision": "Acknowledge and prepare storage facilities.",
+					"decision": "Comply with recall and return affected rations.",
 					"reaction": [
-						"Massive shipment arrives, overwhelming storage capacity.",
-						"Later investigation reveals 60% of containers empty, remainder standard rations."
+						"'Recall compliance noted. Your emotional stability is appreciated.'",
+						"Later discovery: returned rations were perfectly normal. No empathy compounds detected."
 					]
 				},
 				"b": {
-					"decision": "Challenge directive authenticity and request verification.",
+					"decision": "Ignore recall as potential hoax.",
 					"reaction": [
-						"'Compliance is mandatory, Commander.' Signal source becomes increasingly hostile."
+						"'Non-compliance documented. Prepare for vegetable-related emotional events.'"
 					]
 				},
 				"c": {
-					"decision": "Cross-reference directive with sector command.",
+					"decision": "Test rations for alleged compounds.",
 					"reaction": [
-						"No Sector Directive 7-Alpha exists. Signal traced to abandoned communications relay."
+						"Laboratory analysis shows standard nutrient composition. Batch 7X3-Gamma doesn't exist in production records."
 					]
 				}
 			}

@@ -237,6 +237,7 @@ unique_name_in_owner = true
 
 [node name="PauseScreen" parent="." instance=ExtResource("8_gee14")]
 unique_name_in_owner = true
+visible = false
 
 [connection signal="exit_computer" from="." to="Computer" method="_on_game_exit_computer"]
 [connection signal="display_message" from="Hover" to="HoverMessage" method="_on_hover_display_message"]

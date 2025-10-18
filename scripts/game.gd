@@ -10,7 +10,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if can_exit_computer && Input.is_action_just_pressed("unfocus"):
+	if can_exit_computer && Input.is_action_pressed("unfocus"):
 		can_exit_computer = false
 		exit_computer.emit()
 

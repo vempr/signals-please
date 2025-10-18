@@ -42,6 +42,18 @@ Your resources are limited: rations, security, morale. You can survive hunger lo
 You must survive for ten days. After that, the N.A.L. ALLIES, the nearest surviving federation, will reach your borders to unite with your region. Until then, you stand alone, a flickering light in the dark."
 autowrap_mode = 2
 
+[node name="Description2" type="Label" parent="."]
+z_index = -2
+offset_left = 963.0
+offset_top = 964.0
+offset_right = 2149.0
+offset_bottom = 2578.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.156863)
+theme_override_fonts/font = ExtResource("4_wu84c")
+theme_override_font_sizes/font_size = 103
+text = "(Tip: you can pause)"
+autowrap_mode = 2
+
 [node name="PlayButton" type="Button" parent="."]
 offset_left = 49.0
 offset_top = 193.0
@@ -75,7 +87,7 @@ color = Color(0.0392157, 0.0392157, 0.0392157, 0.619608)
 metadata/_edit_group_ = true
 
 [node name="BG" type="Sprite2D" parent="BGContainer"]
-z_index = -2
+z_index = -1
 position = Vector2(242.784, 136.598)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_ekxnf")

@@ -35,7 +35,7 @@ func _ready() -> void:
 	
 	label.text = ""
 	label.grab_focus()
-	DEBUG = false
+	DEBUG = true
 
 
 func _on_player_input_text_submitted(new_text: String) -> void:
@@ -221,7 +221,7 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 func print_text(text: String, color: String = "white", speed: float = 0.005, take_breaks: bool = false) -> bool:
 	terminal_text.text += "[color=" + color + "]"
 	
-	if DEBUG:
+	if DEBUG || GAME_STATE.INSTANT_MESSAGES:
 		terminal_text.text += text
 		terminal_text.text += "[/color]\n"
 		return true
@@ -282,36 +282,35 @@ func generate_real_signal() -> void:
 	
 	
 	if is_real:
+		var real_messages = C.MESSAGES.real[type]
+		var i = randi_range(0, real_messages.size() - 1)
+		
 		current_signal = {
-			"data": C.MESSAGES.real[type][randi_range(0, 1)],
+			"data": real_messages[i],
 			"type": type,
 			"is_real": true,
 		}
+		
+		if type != C.MESSAGE_TYPE.FOOD_SERVICE:
+			C.MESSAGES.real[type].remove_at(i)
 	else:
+		var fake_messages = C.MESSAGES.fake[type]
+		var i = randi_range(0, fake_messages.size() - 1)
+		
 		current_signal = {
-			"data": C.MESSAGES.fake[type][randi_range(0, 1)],
+			"data": fake_messages[i],
 			"type": type,
 			"is_real": false,
 		}
+		
+		if type != C.MESSAGE_TYPE.FOOD_SERVICE:
+			C.MESSAGES.fake[type].remove_at(i)
 
 func nl() -> void:
 	terminal_text.text += "\n"
 
 
-func get_prepared_signal() -> String:
-	var request
-	match current_signal.type:
-		C.MESSAGE_TYPE.NEED_FOOD:
-			request = "[REQUEST: HUMANITARIAN ENTRY CLEARANCE]"
-		C.MESSAGE_TYPE.PROVIDE_FOOD:
-			request = "[REQUEST: TRADE ROUTE ESTABLISHMENT]"
-		C.MESSAGE_TYPE.NEED_HELP:
-			request = "[REQUEST: EMERGENCY RESPONSE AUTHORIZATION]"
-		C.MESSAGE_TYPE.PROVIDE_HELP:
-			request = "[REQUEST: COLLABORATION PROTOCOL ACCESS]"
-		C.MESSAGE_TYPE.FOOD_SERVICE:
-			request = "[REQUEST: LOGISTICAL DISTRIBUTION CONFIRMATION]"
-	
+func get_prepared_signal() -> String:	
 	var d := randf()
 
 	if d <= 0.33:
@@ -321,6 +320,23 @@ func get_prepared_signal() -> String:
 	else:
 		difficulty = DIFFICULTY.HARD
 	
+	var request
+	
+	if difficulty == DIFFICULTY.HARD:
+		request = "[REQUEST: COULD NOT FETCH.]"
+	else:
+		match current_signal.type:
+			C.MESSAGE_TYPE.NEED_FOOD:
+				request = "[REQUEST: HUMANITARIAN ENTRY CLEARANCE]"
+			C.MESSAGE_TYPE.PROVIDE_FOOD:
+				request = "[REQUEST: TRADE ROUTE ESTABLISHMENT]"
+			C.MESSAGE_TYPE.NEED_HELP:
+				request = "[REQUEST: EMERGENCY RESPONSE AUTHORIZATION]"
+			C.MESSAGE_TYPE.PROVIDE_HELP:
+				request = "[REQUEST: COLLABORATION PROTOCOL ACCESS]"
+			C.MESSAGE_TYPE.FOOD_SERVICE:
+				request = "[REQUEST: LOGISTICAL DISTRIBUTION CONFIRMATION]"
+	
 	var id := generate_id()
 	var signal_integrity := generate_signal_integrity()
 	
@@ -329,7 +345,7 @@ func get_prepared_signal() -> String:
 	full_signal += "\nID: " + id
 	full_signal += "\nSECURITY CLEARANCE: Pending"
 	full_signal += "\nSIGNAL INTEGRITY: " + signal_integrity
-	full_signal += "\nMESSAGE: " + current_signal.data.message_content
+	full_signal += "\nMESSAGE: " + corrupt_message(current_signal.data.message_content)
 
 	return full_signal
 
@@ -374,11 +390,11 @@ func generate_signal_integrity() -> String:
 	
 	match difficulty:
 		DIFFICULTY.EASY:
-			percent = snapped(randi_range(60, 99) + randf(), 0.1)
+			percent = snapped(randi_range(70, 99) + randf(), 0.1)
 		DIFFICULTY.MEDIUM:
 			percent = snapped(randi_range(40, 70) + randf(), 0.1)
 		DIFFICULTY.HARD:
-			percent = snapped(randi_range(0, 99) + randf(), 0.1)
+			percent = snapped(randi_range(0, 40) + randf(), 0.1)
 
 	return str(percent) + "%"
 
@@ -492,6 +508,41 @@ func assess_and_display(opt: String) -> bool:
 	return true
 
 
+# real function name should be:
+# print_random_message_and_delete_it_from_list_of_messages_available
 func print_random_message(s: Array) -> bool:
-	await print_text(s[randi_range(0, s.size() - 1)], C.COLORS.orange, 0.005, true)
+	var i := randi_range(0, s.size() - 1)
+	await print_text(s[i], C.COLORS.orange, 0.005, true)
+	s.remove_at(i)
 	return true
+
+
+func corrupt_message(m: String) -> String:
+	var corrupted_message := ""
+	var corruption_chars := ["#", "@", "*", "%", "§"]
+	var punctutation_chars := [" ", ".", ",", ":", "(", ")", "[", "]"]
+	
+	var corruption_rate: float
+	match difficulty:
+		DIFFICULTY.EASY:
+			corruption_rate = 0.04
+		DIFFICULTY.MEDIUM:
+			corruption_rate = 0.12
+		DIFFICULTY.HARD:
+			corruption_rate = 0.20
+	
+	for i in range(m.length()):
+		var current_char = m[i]
+		
+		if current_char in punctutation_chars:
+			if randf() < corruption_rate * 0.5:  # rarer to corrupt punctuation
+				corrupted_message += corruption_chars[randi_range(0, corruption_chars.size() - 1)]
+			else:
+				corrupted_message += current_char
+		else:
+			if randf() < corruption_rate:
+				corrupted_message += corruption_chars[randi_range(0, corruption_chars.size() - 1)]
+			else:
+				corrupted_message += current_char
+	
+	return corrupted_message
