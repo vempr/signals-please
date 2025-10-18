@@ -18,7 +18,11 @@ func _process(_delta: float) -> void:
 func _on_hover_progress() -> void:
 	await Fade.fade_out().finished
 	GAME_STATE.day += 1
-	GAME_STATE.add_hunger()
+	
+	if GAME_STATE.day <= GAME_STATE.FINAL_DAY:
+		GAME_STATE.add_hunger()
+	# else
+	# get_tree().change_scene_to_file("res://scenes/win_scene.tscn")
 	
 	if GAME_STATE.player.hunger > 100:
 		GAME_STATE.lost_to = GAME_STATE.DEATH_REASON.HUNGER

@@ -239,7 +239,7 @@ var MESSAGES = {
 
 		MESSAGE_TYPE.PROVIDE_FOOD: [
 			{
-				"message_content": "Commander, this is Trader Valerius from the Green Valley Caravan. We've had an unexpected surplus from the hydroponic gardens—fresh vegetables and preserved grains. We remember Ironvale's help during the flood season and want to repay the debt. We can deliver enough to supplement your stores for a week. Just grant us safe passage through the western corridor.",
+				"message_content": "Commander, this is Trader Valerius from the Green Valley Caravan. We've had an unexpected surplus from the hydroponic gardens - fresh vegetables and preserved grains. We remember Ironvale's help during the flood season and want to repay the debt. We can deliver enough to supplement your stores for a week. Just grant us safe passage through the western corridor.",
 				"a": {
 					"decision": "Accept the offering and provide armed escort through the territory.",
 					"reaction": [
@@ -263,7 +263,7 @@ var MESSAGES = {
 				}
 			},
 			{
-				"message_content": "Ironvale Command, Dr. Chen here from the Agricultural Research Station. We've successfully stabilized the high-yield grain variant and can share the seeds and cultivation data. This strain grows in poor soil with minimal water. We're not asking for anything in return—just want to ensure the knowledge survives. The future food security of the region depends on this.",
+				"message_content": "Ironvale Command, Dr. Chen here from the Agricultural Research Station. We've successfully stabilized the high-yield grain variant and can share the seeds and cultivation data. This strain grows in poor soil with minimal water. We're not asking for anything in return - just want to ensure the knowledge survives. The future food security of the region depends on this.",
 				"a": {
 					"decision": "Eagerly accept the seeds and research data.",
 					"reaction": [
@@ -334,7 +334,7 @@ var MESSAGES = {
 
 		MESSAGE_TYPE.NEED_HELP: [
 			{
-				"message_content": "Mayday, mayday! This is Captain Reyne of the Northern Watch. Our outpost was overrun by scavengers—they took everything edible. Half my unit is wounded, and we're down to melting snow for water. We held this post for Ironvale through the worst of it, but now... we're watching our own people starve. We just need enough to get back to base. Don't leave your own soldiers out here to die.",
+				"message_content": "Mayday, mayday! This is Captain Reyne of the Northern Watch. Our outpost was overrun by scavengers - they took everything edible. Half my unit is wounded, and we're down to melting snow for water. We held this post for Ironvale through the worst of it, but now... we're watching our own people starve. We just need enough to get back to base. Don't leave your own soldiers out here to die.",
 				"a": {
 					"decision": "Immediately send provisions and extraction team.",
 					"reaction": [
@@ -427,7 +427,7 @@ var MESSAGES = {
 
 		MESSAGE_TYPE.PROVIDE_HELP: [
 			{
-				"message_content": "Commander, this is Engineer Torres from the Free Mechanics Guild. We've detected structural weaknesses in your northeastern perimeter wall that could fail under heavy assault. We have specialized equipment and expertise to reinforce it properly. No payment required—strong walls protect everyone. Just grant us temporary access and basic security clearance.",
+				"message_content": "Commander, this is Engineer Torres from the Free Mechanics Guild. We've detected structural weaknesses in your northeastern perimeter wall that could fail under heavy assault. We have specialized equipment and expertise to reinforce it properly. No payment required - strong walls protect everyone. Just grant us temporary access and basic security clearance.",
 				"a": {
 					"decision": "Accept their expertise and provide necessary access.",
 					"reaction": [
@@ -974,6 +974,25 @@ var MESSAGES = {
 				}
 			}
 		]
+	},
+	"ALLIES": {
+		"message_content": "COMMAND LINK ESTABLISHED - PRIORITY TRANSMISSION FROM THE N.A.L COORDINATED FRONT.\n\nCommander of Ironvale-9, this is Directive Node Halberd speaking under Allied Codex Authority. After prolonged silence, your signal chain has been re-established across fractured skyband channels. We've reviewed your reports, your ration logs, your casualty counts - every decision stamped with your signature. You've done what few could do: kept the light alive under isolation.\n\nWe are advancing through the northern corridors. Resistance remains but is thinning. You'll see the sky brighten before you hear our engines. When that happens, hold your position and signal green flare - we will home on it. Do not abandon Ironvale. Do not silence the beacon.\n\nThis transmission carries classified coordinates for rally convergence. Decode sequence follows:\n> 17.34N / -81.05W / Delta Relay / Access Key: VIGIL / Phrase: 'We are not forgotten.'\n\nYour choices have consequences beyond your walls. We intercepted whispers - some say Ironvale fell years ago, that your voice is a ghost looping in static. If you are still real, prove it. Reply with your operational status, remaining rations, and population count.\n\nIf you cannot transmit by sunrise, we will assume Ironvale lost integrity. In that case, we will continue south - but we will remember your call sign in the Book of the Enduring.\n\nStay steady, Commander. The night has been long enough.",
+		"a": {
+			"decision": "Acknowledge the transmission, transmit operational status and confirm readiness for allied arrival.",
+			"reaction": [
+				"Response uplink initiated…",
+				"'Copy that, Ironvale. Your signal reads stable. Relief units en route - expect contact by dawn. Hold fast, Commander. History will remember your endurance.'",
+				"As the static fades, the terminal hums with new code. External channels realign. Outside, the wind shifts - faint engines echo somewhere beyond the mountains."
+			]
+		},
+		"b": {
+			"decision": "Refuse contact, fearing the signal may be falsified or corrupted.",
+			"reaction": [
+				"Manual override engaged - outgoing signal terminated.",
+				"'Ironvale-9 remains silent. Possible compromise or defection logged.'",
+				"For a moment, the transmission hum lingers - then collapses into white noise. The stars outside seem to pulse, one after another, like a distant sequence of flares - then stillness. No further contact recorded."
+			]
+		}
 	}
 }
 

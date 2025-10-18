@@ -19,6 +19,7 @@ var DEBUG := false
 var current_signal = null
 var difficulty
 var signals_left := 3
+var is_allies_signal := false
 var must_receive_ration := false
 var ration_signal_i := -1 # only valid if player must_receive_ration
 
@@ -32,6 +33,10 @@ func _ready() -> void:
 	if GAME_STATE.last_day_received_ration - GAME_STATE.day >= 2:
 		must_receive_ration = true
 		ration_signal_i = randi_range(1, 3)
+	
+	if GAME_STATE.FINAL_DAY == GAME_STATE.day:
+		must_receive_ration = false
+		ration_signal_i = -1
 	
 	label.text = ""
 	label.grab_focus()
@@ -67,10 +72,11 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 		m += "\nN.A.L ALLIES ARRIVAL: " + str(GAME_STATE.FINAL_DAY - GAME_STATE.day) + " DAYS LEFT"
 		m += "\n[/b]"
 		await print_text(m, C.COLORS.blue)
-
-		for message in C.MESSAGES.SIG.introduction:
-			await wait()
-			await print_text(message, C.COLORS.orange, 0.02, true)
+		
+		if GAME_STATE.day == 1:
+			for message in C.MESSAGES.SIG.introduction:
+				await wait()
+				await print_text(message, C.COLORS.orange, 0.02, true)
 		
 		await wait(1.5)
 		await print_text(C.MESSAGES.incoming_signal, C.COLORS.blue)
@@ -91,16 +97,24 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 		respond_to_signal = true
 		
 		generate_real_signal()
-		await print_text(get_prepared_signal(), "white", 0.03, true)
+		if !is_allies_signal:
+			await print_text(get_prepared_signal(), "white", 0.03, true)
+		else:
+			await print_text(get_prepared_signal(), "#A689E1", 0.03, true)
 		await wait(0.3)
 		
 		if DEBUG:
 			print_text(str(current_signal.is_real))
 		
 		nl()
-		for letter in OPTIONS:
-			var m = "[b]" + letter + "[/b]: " + current_signal.data[letter].decision
-			await print_text(m, C.COLORS.blue)
+		if !is_allies_signal:
+			for letter in OPTIONS:
+				var m = "[b]" + letter + "[/b]: " + current_signal.data[letter].decision
+				await print_text(m, C.COLORS.blue)
+		else:
+			for letter in ["a", "b"]:
+				var m = "[b]" + letter + "[/b]: " + current_signal.data[letter].decision
+				await print_text(m, "#00ff00")
 		nl()
 		
 		can_submit = true
@@ -109,6 +123,31 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 	
 	if respond_to_signal:
 		var option = new_text.strip_edges().to_lower()
+		
+		if is_allies_signal:
+			if !validate_input(option, ["a", "b"]):
+				terminal_text.text += "[color=red]'" + new_text + "' is not an option. Please try again.[/color]" + "\n"
+				return
+			
+			can_submit = false
+			respond_to_signal = false
+			%Arrow.visible = false
+			%PlayerInput.visible = false
+			
+			nl()
+			for message in current_signal.data[option].reaction:
+				await print_text(message, C.COLORS.orange, 0.005, true)
+			nl()
+			
+			if option == "a":
+				print("you win sucka")
+			else:
+				GAME_STATE.lost_to = GAME_STATE.DEATH_REASON.ISOLATION
+				print("you lose sucka")
+			
+			GAME_STATE.day_finished = true
+			return
+		
 		if !validate_input(option, OPTIONS):
 			terminal_text.text += "[color=red]'" + new_text + "' is not an option. Please try again.[/color]" + "\n"
 			return
@@ -131,6 +170,9 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 		nl()
 		
 		if GAME_STATE.people_remaining + pop < 0:
+			%Arrow.visible = false
+			%PlayerInput.visible = false
+			
 			nl()
 			GAME_STATE.lost_to = GAME_STATE.DEATH_REASON.JUMPED
 			await print_text("SIG: Commander..?", C.COLORS.orange, 0.1, true)
@@ -274,6 +316,15 @@ func generate_real_signal() -> void:
 		type = C.MESSAGE_TYPE.FOOD_SERVICE
 		is_real = 1
 	else:
+		if signals_left == 1 && GAME_STATE.FINAL_DAY == GAME_STATE.day:
+			is_allies_signal = true
+			current_signal = {
+				"data": C.MESSAGES.ALLIES,
+				"type": type,
+				"is_real": true,
+			}
+			return
+		
 		type = types[randi_range(0, types.size() - 1)]
 		is_real = randi_range(0, 1)
 	
@@ -306,6 +357,7 @@ func generate_real_signal() -> void:
 		if type != C.MESSAGE_TYPE.FOOD_SERVICE:
 			C.MESSAGES.fake[type].remove_at(i)
 
+
 func nl() -> void:
 	terminal_text.text += "\n"
 
@@ -320,11 +372,9 @@ func get_prepared_signal() -> String:
 	else:
 		difficulty = DIFFICULTY.HARD
 	
-	var request
+	var request := "[REQUEST: COULD NOT FETCH.]"
 	
-	if difficulty == DIFFICULTY.HARD:
-		request = "[REQUEST: COULD NOT FETCH.]"
-	else:
+	if difficulty != DIFFICULTY.HARD:
 		match current_signal.type:
 			C.MESSAGE_TYPE.NEED_FOOD:
 				request = "[REQUEST: HUMANITARIAN ENTRY CLEARANCE]"
@@ -422,19 +472,25 @@ func ddd() -> bool:
 func assess_and_display(opt: String) -> bool:
 	if opt == "c":
 		var reputation_deduction := randi_range(7, 9)
-		rep -= reputation_deduction
+		var can_deduct_reputation := GAME_STATE.people_remaining + pop > 0
+		if can_deduct_reputation:
+			rep -= reputation_deduction
 		
 		await print_text("SIG: Indecisiveness is always frowned upon, commander. Please remember this.", C.COLORS.orange, 0.005, true)
 		await print_text("- "+ str(reputation_deduction) +"% REPUTATION", C.COLORS.orange, 0.01)
+		
+		if !can_deduct_reputation:
+			await print_text("[CAVEAT: Reputation deduction halted due to non-existant population.]", C.COLORS.orange, 0.01)
+		
 		return true
 	
 	if current_signal.is_real:
 		match opt:
 			"a":
 				var reputation_addition := 2
-				rep += reputation_addition
 				
 				if current_signal.type != C.MESSAGE_TYPE.FOOD_SERVICE:
+					rep += reputation_addition
 					var people_addition := 1
 					pop += people_addition
 					await print_random_message(C.MESSAGES.real_success.person)
@@ -443,16 +499,25 @@ func assess_and_display(opt: String) -> bool:
 					await print_text("+ 2% REPUTATION", C.COLORS.orange, 0.01)
 					await print_text("+ 1 POPULATION UNIT", C.COLORS.orange, 0.01)
 				else:
+					var can_add_reputation := GAME_STATE.people_remaining + pop > 0
+					if can_add_reputation:
+						rep += reputation_addition
+					
 					var ration_addition = snapped(randi_range(1, 3) + randf(), 0.1)
 					rat += ration_addition
 					await print_random_message(C.MESSAGES.real_success.food_service)
 					
 					await wait(0.3)
 					await print_text("+ 2% REPUTATION", C.COLORS.orange, 0.01)
+					if !can_add_reputation:
+						await print_text("[CAVEAT: Reputation gain halted due to non-existant population.]", C.COLORS.orange, 0.01)
+					
 					await print_text("+ " + str(ration_addition) +" DAYS OF RATION", C.COLORS.orange, 0.01)
 			"b":
 				var reputation_deduction := 6
-				rep -= reputation_deduction
+				var can_deduct_reputation := GAME_STATE.people_remaining + pop > 0
+				if can_deduct_reputation:
+					rep -= reputation_deduction
 				
 				if current_signal.type != C.MESSAGE_TYPE.FOOD_SERVICE:
 					await print_random_message(C.MESSAGES.real_failed.person)
@@ -461,6 +526,8 @@ func assess_and_display(opt: String) -> bool:
 				
 				await wait(0.3)
 				await print_text("- 6% REPUTATION", C.COLORS.orange, 0.01)
+				if !can_deduct_reputation:
+					await print_text("[CAVEAT: Reputation deduction halted due to non-existant population.]", C.COLORS.orange, 0.01)
 	else:
 		match opt:
 			"a":
@@ -475,10 +542,13 @@ func assess_and_display(opt: String) -> bool:
 				else:
 					reputation_deduction = randi_range(2, 5)
 					population_deduction = 1
-
+				
 				pop -= population_deduction
-				rep -= reputation_deduction
 				rat -= ration_deduction
+				
+				var can_deduct_reputation := GAME_STATE.people_remaining + pop > 0
+				if can_deduct_reputation:
+					rep -= reputation_deduction
 				
 				if current_signal.type != C.MESSAGE_TYPE.FOOD_SERVICE:
 					await print_random_message(C.MESSAGES.fake_failed.person)
@@ -487,6 +557,8 @@ func assess_and_display(opt: String) -> bool:
 				
 				await wait(0.3)
 				await print_text("- "+ str(reputation_deduction) +"% REPUTATION", C.COLORS.orange, 0.01)
+				if !can_deduct_reputation:
+					await print_text("[CAVEAT: Reputation deduction halted due to non-existant population.]", C.COLORS.orange, 0.01)
 				
 				if punishment == 1:
 					await print_text("- " + str(ration_deduction) + " DAYS OF RATION", C.COLORS.orange, 0.01)
@@ -495,15 +567,19 @@ func assess_and_display(opt: String) -> bool:
 					
 			"b":
 				var reputation_addition := 3
-				rep += reputation_addition
+				var can_add_reputation := GAME_STATE.people_remaining + pop > 0
+				if can_add_reputation:
+					rep += reputation_addition
 				
 				if current_signal.type != C.MESSAGE_TYPE.FOOD_SERVICE:
 					await print_random_message(C.MESSAGES.fake_success.person)
 				else:
 					await print_random_message(C.MESSAGES.fake_success.food_service)
-					
+				
 				await wait(0.3)
 				await print_text("+ 3% REPUTATION", C.COLORS.orange, 0.01)
+				if !can_add_reputation:
+					await print_text("[CAVEAT: Reputation gain halted due to non-existant population.]", C.COLORS.orange, 0.01)
 
 	return true
 
@@ -519,7 +595,7 @@ func print_random_message(s: Array) -> bool:
 
 func corrupt_message(m: String) -> String:
 	var corrupted_message := ""
-	var corruption_chars := ["#", "@", "*", "%", "§"]
+	var corruption_chars := ["¬", "¦", "¤", "¢", "¿"]
 	var punctutation_chars := [" ", ".", ",", ":", "(", ")", "[", "]"]
 	
 	var corruption_rate: float
@@ -530,6 +606,10 @@ func corrupt_message(m: String) -> String:
 			corruption_rate = 0.12
 		DIFFICULTY.HARD:
 			corruption_rate = 0.20
+	
+	if is_allies_signal:
+		corruption_rate = 0.001
+	
 	
 	for i in range(m.length()):
 		var current_char = m[i]

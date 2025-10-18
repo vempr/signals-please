@@ -87,15 +87,42 @@ func _on_fridge_hover_area_input_event(_viewport: Node, _event: InputEvent, _sha
 func _on_window_hover_area_mouse_entered() -> void:
 	if !seen_window:
 		%WindowLine.modulate.a = 0.0
-		display_message.emit("The stars are bright tonight.")
-		await get_tree().create_timer(2.0).timeout
 		
-		hide_message.emit()
-		seen_window = true
+		var message := ""
+		
+		match GAME_STATE.day:
+			1:
+				message = "The stars are bright tonight. Maybe they’re watching over us."
+			2:
+				message = "A clear sky. The stars look patient, like they’ve seen worse."
+			3:
+				message = "Cold air, steady light. Feels like the world’s still breathing."
+			4:
+				message = "The stars blink through thin clouds - small signals of calm."
+			5:
+				message = "For a moment, I thought one moved. Maybe a convoy, maybe hope."
+			6:
+				message = "Even through the frost, they shine. Quiet proof we’re not alone."
+			7:
+				message = "The night’s clear again. The stars look almost warm tonight."
+			8:
+				message = "Wind’s calm. The lights above seem closer, like they’re listening."
+			9:
+				message = "Hard day, but the sky still holds steady. That’s something."
+			10:
+				message = "The stars linger long tonight - as if they’re waiting for us to endure."
+
+		if message != "":
+			display_message.emit(message)
+			await get_tree().create_timer(2.0).timeout
+			hide_message.emit()
+			seen_window = true
 
 
 func _on_computer_hover_area_mouse_entered() -> void:
 	if GAME_STATE.day_finished:
+		cursor_normal()
+		%ComputerLine.modulate.a = 0.0
 		return
 		
 	cursor_point()
@@ -104,6 +131,8 @@ func _on_computer_hover_area_mouse_entered() -> void:
 
 func _on_computer_hover_area_mouse_exited() -> void:
 	if GAME_STATE.day_finished:
+		cursor_normal()
+		%ComputerLine.modulate.a = 0.0
 		return
 		
 	cursor_normal()
