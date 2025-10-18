@@ -21,8 +21,15 @@ func _on_hover_progress() -> void:
 	
 	if GAME_STATE.day <= GAME_STATE.FINAL_DAY:
 		GAME_STATE.add_hunger()
-	# else
-	# get_tree().change_scene_to_file("res://scenes/win_scene.tscn")
+	else:
+		if GAME_STATE.lost_to == GAME_STATE.DEATH_REASON.ISOLATION:
+			get_tree().change_scene_to_file("res://scenes/game_over.tscn")
+			Fade.fade_in(1.5)
+			return
+		else:
+			get_tree().change_scene_to_file("res://scenes/game_win.tscn")
+			Fade.fade_in(1.5)
+			return
 	
 	if GAME_STATE.player.hunger > 100:
 		GAME_STATE.lost_to = GAME_STATE.DEATH_REASON.HUNGER

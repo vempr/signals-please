@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+signal back_in_game
+
 
 func _ready() -> void:
 	%Control.modulate.a = 0.0
@@ -11,6 +13,7 @@ func _process(_delta: float) -> void:
 		var tween = create_tween()
 		
 		if visible:
+			back_in_game.emit()
 			get_tree().paused = false
 			tween.tween_property(%Control, "modulate:a", 0.0, 0.1)
 			await tween.finished
@@ -24,6 +27,7 @@ func _process(_delta: float) -> void:
 
 
 func _on_continue_button_pressed() -> void:
+	back_in_game.emit()
 	get_tree().paused = false
 	
 	var tween = create_tween()

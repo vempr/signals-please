@@ -1,0 +1,110 @@
+[gd_scene load_steps=5 format=3 uid="uid://tk5dwj1ileyc"]
+
+[ext_resource type="Script" uid="uid://bv58y8kmcn5lq" path="res://scripts/game_win.gd" id="1_7ej5r"]
+[ext_resource type="FontFile" uid="uid://cbi6qc2w2chwv" path="res://assets/fonts/Pixellari.ttf" id="2_oueg3"]
+[ext_resource type="Texture2D" uid="uid://c0hlw0e2d107l" path="res://assets/images/bg.png" id="3_mtd57"]
+[ext_resource type="StyleBox" uid="uid://bc8oxxejsrbsp" path="res://styles/normal_button.tres" id="4_lynnb"]
+
+[node name="GameWin" type="Node2D"]
+script = ExtResource("1_7ej5r")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -10
+offset_right = 1973.0
+offset_bottom = 1130.0
+color = Color(0, 0, 0, 1)
+
+[node name="SIGLabel" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 997.0
+offset_top = 36.0
+offset_right = 1915.0
+offset_bottom = 95.0
+theme_override_colors/font_color = Color(0.901961, 0.431373, 0.0705882, 1)
+theme_override_fonts/font = ExtResource("2_oueg3")
+theme_override_font_sizes/font_size = 35
+text = "> SIG: Good morning, commander. Ready for another day?"
+autowrap_mode = 2
+
+[node name="Timer" type="Timer" parent="."]
+unique_name_in_owner = true
+
+[node name="BGContainer" type="ColorRect" parent="."]
+unique_name_in_owner = true
+z_index = -1
+offset_left = 25.0
+offset_top = 25.0
+offset_right = 514.0
+offset_bottom = 300.0
+scale = Vector2(1.94, 1.94)
+color = Color(0.0392157, 0.0392157, 0.0392157, 0.619608)
+metadata/_edit_group_ = true
+
+[node name="BG" type="Sprite2D" parent="BGContainer"]
+z_index = -2
+position = Vector2(242.784, 136.598)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("3_mtd57")
+
+[node name="Message" type="Label" parent="."]
+unique_name_in_owner = true
+visible = false
+offset_left = 1062.0
+offset_top = 116.0
+offset_right = 1837.0
+offset_bottom = 713.0
+theme_override_colors/font_color = Color(0.65098, 0.537255, 0.882353, 1)
+theme_override_fonts/font = ExtResource("2_oueg3")
+theme_override_font_sizes/font_size = 46
+text = "The final transmission fades, and for the first time in months, the sky over Ironvale glows with something brighter than fire.
+
+Engines cut through the clouds, scattering ash and silence alike, and the wind carries voices that don't sound like ghosts. When the gates open, the city exhales - not in victory, but in relief - as the long night finally ends."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Buttons" type="Node2D" parent="."]
+unique_name_in_owner = true
+visible = false
+
+[node name="ReplayButton" type="Button" parent="Buttons"]
+offset_left = 1033.0
+offset_top = 800.0
+offset_right = 1869.0
+offset_bottom = 909.0
+theme_override_fonts/font = ExtResource("2_oueg3")
+theme_override_font_sizes/font_size = 61
+theme_override_styles/focus = ExtResource("4_lynnb")
+theme_override_styles/disabled_mirrored = ExtResource("4_lynnb")
+theme_override_styles/disabled = ExtResource("4_lynnb")
+theme_override_styles/hover_pressed_mirrored = ExtResource("4_lynnb")
+theme_override_styles/hover_pressed = ExtResource("4_lynnb")
+theme_override_styles/hover_mirrored = ExtResource("4_lynnb")
+theme_override_styles/hover = ExtResource("4_lynnb")
+theme_override_styles/pressed_mirrored = ExtResource("4_lynnb")
+theme_override_styles/pressed = ExtResource("4_lynnb")
+theme_override_styles/normal_mirrored = ExtResource("4_lynnb")
+theme_override_styles/normal = ExtResource("4_lynnb")
+text = "REPLAY"
+
+[node name="MainMenuButton" type="Button" parent="Buttons"]
+offset_left = 1033.0
+offset_top = 933.0
+offset_right = 1869.0
+offset_bottom = 1042.0
+theme_override_fonts/font = ExtResource("2_oueg3")
+theme_override_font_sizes/font_size = 61
+theme_override_styles/focus = ExtResource("4_lynnb")
+theme_override_styles/disabled_mirrored = ExtResource("4_lynnb")
+theme_override_styles/disabled = ExtResource("4_lynnb")
+theme_override_styles/hover_pressed_mirrored = ExtResource("4_lynnb")
+theme_override_styles/hover_pressed = ExtResource("4_lynnb")
+theme_override_styles/hover_mirrored = ExtResource("4_lynnb")
+theme_override_styles/hover = ExtResource("4_lynnb")
+theme_override_styles/pressed_mirrored = ExtResource("4_lynnb")
+theme_override_styles/pressed = ExtResource("4_lynnb")
+theme_override_styles/normal_mirrored = ExtResource("4_lynnb")
+theme_override_styles/normal = ExtResource("4_lynnb")
+text = "MAIN MENU"
+
+[connection signal="pressed" from="Buttons/ReplayButton" to="." method="_on_replay_button_pressed"]
+[connection signal="pressed" from="Buttons/MainMenuButton" to="." method="_on_main_menu_button_pressed"]

@@ -51,6 +51,11 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_vs6ym")
 text = "dwd"
 max_length = 50
 keep_editing_on_text_submit = true
+context_menu_enabled = false
+emoji_menu_enabled = false
+shortcut_keys_enabled = false
+middle_mouse_paste_enabled = false
+selecting_enabled = false
 caret_blink = true
 caret_force_displayed = true
 

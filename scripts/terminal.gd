@@ -39,7 +39,7 @@ func _ready() -> void:
 		ration_signal_i = -1
 	
 	label.text = ""
-	label.grab_focus()
+	label.grab_focus.call_deferred()
 	DEBUG = true
 
 
@@ -136,14 +136,11 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 			
 			nl()
 			for message in current_signal.data[option].reaction:
-				await print_text(message, C.COLORS.orange, 0.005, true)
+				await print_text(message, C.COLORS.blue, 0.005, true)
 			nl()
 			
-			if option == "a":
-				print("you win sucka")
-			else:
+			if option == "b":
 				GAME_STATE.lost_to = GAME_STATE.DEATH_REASON.ISOLATION
-				print("you lose sucka")
 			
 			GAME_STATE.day_finished = true
 			return
@@ -263,7 +260,7 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 func print_text(text: String, color: String = "white", speed: float = 0.005, take_breaks: bool = false) -> bool:
 	terminal_text.text += "[color=" + color + "]"
 	
-	if DEBUG || GAME_STATE.INSTANT_MESSAGES:
+	if DEBUG || (GAME_STATE.INSTANT_MESSAGES && !is_allies_signal):
 		terminal_text.text += text
 		terminal_text.text += "[/color]\n"
 		return true
@@ -300,7 +297,7 @@ func wait(time: float = 0.5) -> bool:
 
 func _on_computer_in_computer() -> void:
 	label.text = ""
-	label.grab_focus()
+	label.grab_focus.call_deferred()
 
 
 func generate_real_signal() -> void:
@@ -334,6 +331,10 @@ func generate_real_signal() -> void:
 	
 	if is_real:
 		var real_messages = C.MESSAGES.real[type]
+		while real_messages.size() == 0:
+			type = types[randi_range(0, types.size() - 1)]
+			real_messages = C.MESSAGES.real[type]
+		
 		var i = randi_range(0, real_messages.size() - 1)
 		
 		current_signal = {
@@ -346,6 +347,10 @@ func generate_real_signal() -> void:
 			C.MESSAGES.real[type].remove_at(i)
 	else:
 		var fake_messages = C.MESSAGES.fake[type]
+		while fake_messages.size() == 0:
+			type = types[randi_range(0, types.size() - 1)]
+			fake_messages = C.MESSAGES.fake[type]
+			
 		var i = randi_range(0, fake_messages.size() - 1)
 		
 		current_signal = {
@@ -626,3 +631,8 @@ func corrupt_message(m: String) -> String:
 				corrupted_message += current_char
 	
 	return corrupted_message
+
+
+func _on_pause_screen_back_in_game() -> void:
+	label.grab_focus.call_deferred()
+	
