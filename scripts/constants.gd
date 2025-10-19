@@ -18,7 +18,37 @@ const sig_intro_3 = "SIG: Ultimately, it's your call. Each signal comes with a r
 var MESSAGES = {
 	"incoming_signal": "[b]\n\n--------------------\nINCOMING SIGNAL...\nTYPE 'r' TO RECEIVE.\n--------------------\n\n[/b]",
 	"SIG": {
-		"introduction": [sig_intro_1, sig_intro_2, sig_intro_3]
+		1: [sig_intro_1, sig_intro_2, sig_intro_3],
+		2: [
+			"SIG: Morning, Commander. The ration count is holding, but barely. Three more signals queued up already. They're getting smarter about how they ask.",
+			"SIG: Remember, hunger makes people inventive. Desperation breeds convincing lies and unconvincing truths."
+		],
+		3: [
+			"SIG: Commander. The southern fence showed heat signatures again last night. More outsiders gathering. They're learning our patrol schedules.",
+			"SIG: The council is watching your approval ratings. Every decision echoes in the mess hall whispers."
+		],
+		4: [
+			"SIG: The patterns are emerging now. Fake signals often over-explain, under-explain, or explain the wrong things entirely.",
+		],
+		5: [
+			"SIG: Heavy radio traffic this morning. Multiple groups seem to be testing our response times. Stay sharp.",
+		],
+		6: [
+			"SIG: Today's deception might be more sophisticated. Look for inconsistencies in technical details.",
+			"SIG: The people are getting restless. They need to see both compassion and strength from your decisions."
+		],
+		7: [
+			"SIG: Weather's turning. Storms incoming. Signal quality will degrade, making verification harder.",
+		],
+		8: [
+			"SIG: Watch for recycled stories today. The good liars don't waste their best material.",
+		],
+		9: [
+			"SIG: We're approaching the point where one bad decision could cascade. Choose with the long game in mind."
+		],
+		10: [
+			"SIG: However this ends, Commander, it's been an honor serving with you. Make these last decisions count."
+		]
 	},
 	"real_success": {
 		"person": [

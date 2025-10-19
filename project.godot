@@ -19,6 +19,11 @@ run/main_scene="uid://dv5o0yn2j6xht"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[audio]
+
+driver/output_latency=50
+driver/output_latency.web=100
+
 [autoload]
 
 GAME_STATE="*res://scripts/state.gd"

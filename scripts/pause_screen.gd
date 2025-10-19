@@ -6,6 +6,7 @@ signal back_in_game
 func _ready() -> void:
 	%Control.modulate.a = 0.0
 	visible = false
+	%Bg2.modulate.a = 0.2
 
 
 func _process(_delta: float) -> void:
@@ -27,6 +28,7 @@ func _process(_delta: float) -> void:
 
 
 func _on_continue_button_pressed() -> void:
+	%Computer.play()
 	back_in_game.emit()
 	get_tree().paused = false
 	
@@ -38,6 +40,8 @@ func _on_continue_button_pressed() -> void:
 
 
 func _on_main_menu_button_pressed() -> void:
+	GAME_STATE.stop_music()
+	%Computer.play()
 	get_tree().paused = false
 	await Fade.fade_out().finished
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")

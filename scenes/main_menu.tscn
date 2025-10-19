@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://dv5o0yn2j6xht"]
+[gd_scene load_steps=7 format=3 uid="uid://dv5o0yn2j6xht"]
 
 [ext_resource type="Script" uid="uid://dmln134mf8nbr" path="res://scripts/main_menu.gd" id="1_l6cm7"]
 [ext_resource type="Texture2D" uid="uid://c0hlw0e2d107l" path="res://assets/images/bg.png" id="2_ekxnf"]
 [ext_resource type="FontFile" uid="uid://bar55wglxrc3e" path="res://assets/fonts/Pixeled.ttf" id="3_bqqt6"]
 [ext_resource type="StyleBox" uid="uid://bc8oxxejsrbsp" path="res://styles/normal_button.tres" id="4_8ln24"]
 [ext_resource type="FontFile" uid="uid://cbi6qc2w2chwv" path="res://assets/fonts/Pixellari.ttf" id="4_wu84c"]
+[ext_resource type="AudioStream" uid="uid://bned1vswcsy3n" path="res://assets/sfx/talk/valid_input.wav" id="6_rtw2f"]
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_l6cm7")
@@ -91,5 +92,10 @@ z_index = -1
 position = Vector2(242.784, 136.598)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_ekxnf")
+
+[node name="ValidInput" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("6_rtw2f")
+volume_db = -25.0
 
 [connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]

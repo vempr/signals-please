@@ -1,10 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://6n1jus564k5r"]
+[gd_scene load_steps=19 format=3 uid="uid://6n1jus564k5r"]
 
 [ext_resource type="Script" uid="uid://ds3swgv6c3agv" path="res://scripts/game.gd" id="1_iywne"]
 [ext_resource type="PackedScene" uid="uid://ya74x22r2oq" path="res://scenes/hover_message.tscn" id="1_lnu2h"]
 [ext_resource type="Texture2D" uid="uid://c0hlw0e2d107l" path="res://assets/images/bg.png" id="1_uwrxv"]
 [ext_resource type="Script" uid="uid://b1f27bwcpxp5q" path="res://scripts/hover.gd" id="1_yqjtg"]
 [ext_resource type="AudioStream" uid="uid://b2cj4fxkshutk" path="res://assets/sfx/eat.wav" id="4_lbhrr"]
+[ext_resource type="AudioStream" uid="uid://b516164vqy6oj" path="res://assets/sfx/sleep.wav" id="6_0tnpc"]
 [ext_resource type="Script" uid="uid://ced1cvx7qs54e" path="res://scripts/computer.gd" id="6_p57ef"]
 [ext_resource type="PackedScene" uid="uid://ca1qwxe2wemin" path="res://scenes/terminal.tscn" id="7_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://ck32vg7yi57bv" path="res://scenes/pause_screen.tscn" id="8_gee14"]
@@ -211,8 +212,12 @@ texture = ExtResource("1_uwrxv")
 [node name="Eat" type="AudioStreamPlayer" parent="SFX"]
 unique_name_in_owner = true
 stream = ExtResource("4_lbhrr")
-volume_db = -5.0
+volume_db = -30.0
 pitch_scale = 0.9
+
+[node name="Sleep" type="AudioStreamPlayer" parent="SFX"]
+unique_name_in_owner = true
+stream = ExtResource("6_0tnpc")
 
 [node name="Computer" type="CanvasLayer" parent="."]
 unique_name_in_owner = true

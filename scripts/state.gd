@@ -6,14 +6,14 @@ extends Node
 # ((called JUMPED cuz I couldn't think of a better name xd))
 enum DEATH_REASON { HUNGER, REPUTATION, ISOLATION, JUMPED }
 
-var INITIAL_HUNGER := randi_range(1, 10) + 20
+var INITIAL_HUNGER := 99 # randi_range(1, 10) + 20
 var INITIAL_REPUTATION := randi_range(1, 10) + 40
 var INITIAL_RATION_REMAINING: float = snapped(randi_range(5, 6) + randf(), 0.1)
-const INITIAL_PEOPLE_REMAINING := 0 # 15
+const INITIAL_PEOPLE_REMAINING := 15
 
 var lost_to = null
 var FINAL_DAY := 10
-var day := 10
+var day := 1
 var last_day_received_ration := 1
 var day_finished := false
 @onready var player = {
@@ -22,6 +22,13 @@ var day_finished := false
 }
 var ration_remaining := INITIAL_RATION_REMAINING
 var people_remaining := INITIAL_PEOPLE_REMAINING
+
+var music_player
+
+func _ready() -> void:
+	music_player = AudioStreamPlayer.new()
+	add_child(music_player)
+	music_player.stream = load("res://assets/sfx/Dystopian Theme.mp3")
 
 
 func get_reputation_status() -> String:
@@ -53,5 +60,19 @@ func reset() -> void:
 	player.reputation = INITIAL_REPUTATION
 	ration_remaining = INITIAL_RATION_REMAINING
 	people_remaining = INITIAL_PEOPLE_REMAINING
+
+
+func play_music() -> void:
+	music_player.volume_db = -15.0
+	music_player.pitch_scale = 0.8
+	music_player.play()
+
+
+func stop_music() -> bool:
+	var tween = create_tween()
+	tween.tween_property(music_player, "volume_db", -80.0, 1.0)
+	await tween.finished
+	return true
+
 
 var INSTANT_MESSAGES := false

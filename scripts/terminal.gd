@@ -40,7 +40,7 @@ func _ready() -> void:
 	
 	label.text = ""
 	label.grab_focus.call_deferred()
-	DEBUG = true
+	DEBUG = false
 
 
 func _on_player_input_text_submitted(new_text: String) -> void:
@@ -55,9 +55,11 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 	
 	if !booted:
 		if !validate_input(new_text, ["boot"]):
+			%InvalidInput.play()
 			terminal_text.text += "[color=red]'" + new_text + "' is not a known command. Please try again.[/color]" + "\n"
 			return
 		
+		%ValidInput.play()
 		can_submit = false
 		booted = true
 		
@@ -71,15 +73,14 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 		m += "\nPOPULATION: " + str(GAME_STATE.people_remaining) + " PEOPLE REMAINING"
 		m += "\nN.A.L ALLIES ARRIVAL: " + str(GAME_STATE.FINAL_DAY - GAME_STATE.day) + " DAYS LEFT"
 		m += "\n[/b]"
-		await print_text(m, C.COLORS.blue)
+		await print_text(m, C.COLORS.blue, 0.005, false, "Computer")
 		
-		if GAME_STATE.day == 1:
-			for message in C.MESSAGES.SIG.introduction:
-				await wait()
-				await print_text(message, C.COLORS.orange, 0.02, true)
+		for message in C.MESSAGES.SIG[GAME_STATE.day]:
+			await wait()
+			await print_text(message, C.COLORS.orange, 0.03, true, "SIG")
 		
 		await wait(1.5)
-		await print_text(C.MESSAGES.incoming_signal, C.COLORS.blue)
+		await print_text(C.MESSAGES.incoming_signal, C.COLORS.blue, 0.005, false, "Computer")
 		
 		can_submit = true
 		incoming_signal_next = true
@@ -88,17 +89,22 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 	
 	if incoming_signal_next:
 		if !validate_input(new_text, ["r"]):
+			%InvalidInput.play()
 			terminal_text.text += "[color=red]'" + new_text + "' is not a known command. Please try again.[/color]" + "\n"
 			return
-			
+		
 		nl()
+		%ValidInput.play()
 		can_submit = false
 		incoming_signal_next = false
 		respond_to_signal = true
 		
 		generate_real_signal()
 		if !is_allies_signal:
-			await print_text(get_prepared_signal(), "white", 0.03, true)
+			if current_signal.is_real:
+				await print_text(get_prepared_signal(), "white", 0.03, true)
+			else:
+				await print_text(get_prepared_signal(), "white", 0.03, true, "FakeSignal")
 		else:
 			await print_text(get_prepared_signal(), "#A689E1", 0.03, true)
 		await wait(0.3)
@@ -110,11 +116,11 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 		if !is_allies_signal:
 			for letter in OPTIONS:
 				var m = "[b]" + letter + "[/b]: " + current_signal.data[letter].decision
-				await print_text(m, C.COLORS.blue)
+				await print_text(m, C.COLORS.blue, 0.005, false, "Computer")
 		else:
 			for letter in ["a", "b"]:
 				var m = "[b]" + letter + "[/b]: " + current_signal.data[letter].decision
-				await print_text(m, "#00ff00")
+				await print_text(m, "#00ff00", 0.005, false, "Computer")
 		nl()
 		
 		can_submit = true
@@ -126,6 +132,7 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 		
 		if is_allies_signal:
 			if !validate_input(option, ["a", "b"]):
+				%InvalidInput.play()
 				terminal_text.text += "[color=red]'" + new_text + "' is not an option. Please try again.[/color]" + "\n"
 				return
 			
@@ -136,7 +143,7 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 			
 			nl()
 			for message in current_signal.data[option].reaction:
-				await print_text(message, C.COLORS.blue, 0.005, true)
+				await print_text(message, C.COLORS.blue, 0.005, true, "Computer")
 			nl()
 			
 			if option == "b":
@@ -146,15 +153,17 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 			return
 		
 		if !validate_input(option, OPTIONS):
+			%InvalidInput.play()
 			terminal_text.text += "[color=red]'" + new_text + "' is not an option. Please try again.[/color]" + "\n"
 			return
 		
+		%ValidInput.play()
 		can_submit = false
 		respond_to_signal = false
 		
 		nl()
 		for message in current_signal.data[option].reaction:
-			await print_text(message, C.COLORS.blue, 0.005, true)
+			await print_text(message, C.COLORS.blue, 0.005, true, "Computer")
 		nl()
 		
 		await ddd()
@@ -172,7 +181,7 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 			
 			nl()
 			GAME_STATE.lost_to = GAME_STATE.DEATH_REASON.JUMPED
-			await print_text("SIG: Commander..?", C.COLORS.orange, 0.1, true)
+			await print_text("SIG: Commander..?", C.COLORS.orange, 0.1, true, "SIG")
 			await wait(0.5)
 			
 			%TypingTimer.stop()
@@ -185,12 +194,12 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 		
 		signals_left -= 1
 		if signals_left > 0:
-			await print_text(C.MESSAGES.incoming_signal, C.COLORS.blue)
+			await print_text(C.MESSAGES.incoming_signal, C.COLORS.blue, 0.005, false, "Computer")
 			can_submit = true
 			incoming_signal_next = true
 		else:
 			nl()
-			await print_text("SIG: End of day report, compiling local metrics.", C.COLORS.orange, 0.01, true)
+			await print_text("SIG: End of day report, compiling local metrics.", C.COLORS.orange, 0.01, true, "SIG")
 			await ddd()
 			nl()
 			nl()
@@ -250,22 +259,53 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 				summary += "Ration stores remaining after consumption: %.1f days.\n" % curr_rat
 			
 			
-			await print_text(summary, "#00ff00", 0.01, true)
+			await print_text(summary, "#00ff00", 0.01, true, "Computer")
 			await wait(1.0)
-			await print_text("SIG: You must rest now, commander. See you tomorrow.", C.COLORS.orange, 0.01, true)
+			await print_text("SIG: You must rest now, commander. See you tomorrow.", C.COLORS.orange, 0.01, true, "SIG")
 			GAME_STATE.day_finished = true
 			day_is_over.emit()
 
 
-func print_text(text: String, color: String = "white", speed: float = 0.005, take_breaks: bool = false) -> bool:
+func print_text(text: String, color: String = "white", speed: float = 0.005, take_breaks: bool = false, speaker: String = "RealSignal") -> bool:
 	terminal_text.text += "[color=" + color + "]"
+	var fake_signal_pitch_scale = randf_range(0.9, 1.1)
 	
 	if DEBUG || (GAME_STATE.INSTANT_MESSAGES && !is_allies_signal):
+		match speaker:
+			"SIG":
+				%Sig.play()
+			"Computer":
+				%Computer.play()
+			"RealSignal":
+				%Signal.pitch_scale = 1.0
+				%Signal.play()
+			"FakeSignal":
+				%Signal.pitch_scale = fake_signal_pitch_scale
+				%Signal.stop()
+				%Signal.play()
+		
 		terminal_text.text += text
 		terminal_text.text += "[/color]\n"
 		return true
-		
+	
 	for letter in text:
+		if randf() > 0.5:
+			match speaker:
+				"SIG":
+					%Sig.stop()
+					%Sig.play()
+				"Computer":
+					%Computer.stop()
+					%Computer.play()
+				"RealSignal":
+					%Signal.pitch_scale = 1.0
+					%Signal.stop()
+					%Signal.play()
+				"FakeSignal":
+					%Signal.pitch_scale = fake_signal_pitch_scale
+					%Signal.stop()
+					%Signal.play()
+		
 		terminal_text.text += letter
 		
 		if take_breaks && letter == ".":
@@ -464,12 +504,16 @@ func _on_memory_timer_timeout() -> void:
 
 func ddd() -> bool:
 	terminal_text.text += "[color=00ff00]"
+	%Computer.pitch_scale = 0.8
 	
 	for i in range(3):
+		%Computer.play()
+		
 		terminal_text.text += "."
 		timer.start(0.6)
 		await timer.timeout
 	
+	%Computer.pitch_scale = 1.0
 	terminal_text.text += "[/color]"
 	return true
 
@@ -481,11 +525,11 @@ func assess_and_display(opt: String) -> bool:
 		if can_deduct_reputation:
 			rep -= reputation_deduction
 		
-		await print_text("SIG: Indecisiveness is always frowned upon, commander. Please remember this.", C.COLORS.orange, 0.005, true)
-		await print_text("- "+ str(reputation_deduction) +"% REPUTATION", C.COLORS.orange, 0.01)
+		await print_text("SIG: Indecisiveness is always frowned upon, commander. Please remember this.", C.COLORS.orange, 0.005, true, "SIG")
+		await print_text("- "+ str(reputation_deduction) +"% REPUTATION", C.COLORS.orange, 0.01, false, "SIG")
 		
 		if !can_deduct_reputation:
-			await print_text("[CAVEAT: Reputation deduction halted due to non-existant population.]", C.COLORS.orange, 0.01)
+			await print_text("[CAVEAT: Reputation deduction halted due to non-existant population.]", C.COLORS.orange, 0.01, false, "SIG")
 		
 		return true
 	
@@ -501,8 +545,8 @@ func assess_and_display(opt: String) -> bool:
 					await print_random_message(C.MESSAGES.real_success.person)
 					
 					await wait(0.3)
-					await print_text("+ 2% REPUTATION", C.COLORS.orange, 0.01)
-					await print_text("+ 1 POPULATION UNIT", C.COLORS.orange, 0.01)
+					await print_text("+ 2% REPUTATION", C.COLORS.orange, 0.01, false, "SIG")
+					await print_text("+ 1 POPULATION UNIT", C.COLORS.orange, 0.01, false, "SIG")
 				else:
 					var can_add_reputation := GAME_STATE.people_remaining + pop > 0
 					if can_add_reputation:
@@ -513,11 +557,11 @@ func assess_and_display(opt: String) -> bool:
 					await print_random_message(C.MESSAGES.real_success.food_service)
 					
 					await wait(0.3)
-					await print_text("+ 2% REPUTATION", C.COLORS.orange, 0.01)
+					await print_text("+ 2% REPUTATION", C.COLORS.orange, 0.01, false, "SIG")
 					if !can_add_reputation:
-						await print_text("[CAVEAT: Reputation gain halted due to non-existant population.]", C.COLORS.orange, 0.01)
+						await print_text("[CAVEAT: Reputation gain halted due to non-existant population.]", C.COLORS.orange, 0.01, false, "SIG")
 					
-					await print_text("+ " + str(ration_addition) +" DAYS OF RATION", C.COLORS.orange, 0.01)
+					await print_text("+ " + str(ration_addition) +" DAYS OF RATION", C.COLORS.orange, 0.01, false, "SIG")
 			"b":
 				var reputation_deduction := 6
 				var can_deduct_reputation := GAME_STATE.people_remaining + pop > 0
@@ -530,9 +574,9 @@ func assess_and_display(opt: String) -> bool:
 					await print_random_message(C.MESSAGES.real_failed.food_service)
 				
 				await wait(0.3)
-				await print_text("- 6% REPUTATION", C.COLORS.orange, 0.01)
+				await print_text("- 6% REPUTATION", C.COLORS.orange, 0.01, false, "SIG")
 				if !can_deduct_reputation:
-					await print_text("[CAVEAT: Reputation deduction halted due to non-existant population.]", C.COLORS.orange, 0.01)
+					await print_text("[CAVEAT: Reputation deduction halted due to non-existant population.]", C.COLORS.orange, 0.01, false, "SIG")
 	else:
 		match opt:
 			"a":
@@ -561,14 +605,14 @@ func assess_and_display(opt: String) -> bool:
 					await print_random_message(C.MESSAGES.fake_failed.food_service)
 				
 				await wait(0.3)
-				await print_text("- "+ str(reputation_deduction) +"% REPUTATION", C.COLORS.orange, 0.01)
+				await print_text("- "+ str(reputation_deduction) +"% REPUTATION", C.COLORS.orange, 0.01, false, "SIG")
 				if !can_deduct_reputation:
-					await print_text("[CAVEAT: Reputation deduction halted due to non-existant population.]", C.COLORS.orange, 0.01)
+					await print_text("[CAVEAT: Reputation deduction halted due to non-existant population.]", C.COLORS.orange, 0.01, false, "SIG")
 				
 				if punishment == 1:
-					await print_text("- " + str(ration_deduction) + " DAYS OF RATION", C.COLORS.orange, 0.01)
+					await print_text("- " + str(ration_deduction) + " DAYS OF RATION", C.COLORS.orange, 0.01, false, "SIG")
 				else:
-					await print_text("- 1 POPULATION UNIT", C.COLORS.orange, 0.01)
+					await print_text("- 1 POPULATION UNIT", C.COLORS.orange, 0.01, false, "SIG")
 					
 			"b":
 				var reputation_addition := 3
@@ -582,9 +626,9 @@ func assess_and_display(opt: String) -> bool:
 					await print_random_message(C.MESSAGES.fake_success.food_service)
 				
 				await wait(0.3)
-				await print_text("+ 3% REPUTATION", C.COLORS.orange, 0.01)
+				await print_text("+ 3% REPUTATION", C.COLORS.orange, 0.01, false, "SIG")
 				if !can_add_reputation:
-					await print_text("[CAVEAT: Reputation gain halted due to non-existant population.]", C.COLORS.orange, 0.01)
+					await print_text("[CAVEAT: Reputation gain halted due to non-existant population.]", C.COLORS.orange, 0.01, false, "SIG")
 
 	return true
 
@@ -593,7 +637,7 @@ func assess_and_display(opt: String) -> bool:
 # print_random_message_and_delete_it_from_list_of_messages_available
 func print_random_message(s: Array) -> bool:
 	var i := randi_range(0, s.size() - 1)
-	await print_text(s[i], C.COLORS.orange, 0.005, true)
+	await print_text(s[i], C.COLORS.orange, 0.005, true, "SIG")
 	s.remove_at(i)
 	return true
 
@@ -635,4 +679,7 @@ func corrupt_message(m: String) -> String:
 
 func _on_pause_screen_back_in_game() -> void:
 	label.grab_focus.call_deferred()
-	
+
+
+func _on_player_input_text_changed(_new_text: String) -> void:
+	%Type.play()

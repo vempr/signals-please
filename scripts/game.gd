@@ -7,6 +7,9 @@ var can_exit_computer := false
 
 func _ready() -> void:
 	GAME_STATE.day_finished = false
+	if GAME_STATE.day == 1:
+		await GAME_STATE.stop_music()
+		GAME_STATE.play_music()
 
 
 func _process(_delta: float) -> void:

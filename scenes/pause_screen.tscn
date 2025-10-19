@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://ck32vg7yi57bv"]
+[gd_scene load_steps=9 format=3 uid="uid://ck32vg7yi57bv"]
 
 [ext_resource type="FontFile" uid="uid://cbi6qc2w2chwv" path="res://assets/fonts/Pixellari.ttf" id="1_gchx3"]
 [ext_resource type="Script" uid="uid://wpy7xjqiuafy" path="res://scripts/pause_screen.gd" id="1_o31j6"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://c0hlw0e2d107l" path="res://assets/images/bg.png" id="4_27awe"]
 [ext_resource type="StyleBox" uid="uid://ntsf1550r00n" path="res://styles/green_button.tres" id="4_duq8p"]
 [ext_resource type="StyleBox" uid="uid://b3v1vurd8ntg0" path="res://styles/red_button.tres" id="5_k26m1"]
+[ext_resource type="AudioStream" uid="uid://d0amonk26pq58" path="res://assets/sfx/talk/computer.wav" id="8_213y4"]
 
 [node name="PauseScreen" type="CanvasLayer"]
 process_mode = 3
@@ -44,6 +45,19 @@ Your resources are limited: rations, security, morale. You can survive hunger lo
 
 You must survive for ten days. After that, the N.A.L. ALLIES, the nearest surviving federation, will reach your borders to unite with your region. Until then, you stand alone, a flickering light in the dark."
 horizontal_alignment = 2
+autowrap_mode = 2
+
+[node name="Description2" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 772.0
+offset_top = 154.0
+offset_right = 1203.0
+offset_bottom = 256.0
+theme_override_fonts/font = ExtResource("1_gchx3")
+theme_override_font_sizes/font_size = 31
+text = "Controls:
+- Left click to interact
+- Right click to exit terminal"
 autowrap_mode = 2
 
 [node name="MainMenuButton" type="Button" parent="Control"]
@@ -150,6 +164,21 @@ text = "Disable Instant Messages (Typing Animations)"
 position = Vector2(630, 605)
 scale = Vector2(3.64, 3.64)
 texture = ExtResource("4_27awe")
+
+[node name="Bg2" type="Sprite2D" parent="Control"]
+unique_name_in_owner = true
+position = Vector2(994.3, 75.8)
+scale = Vector2(1.35437, 0.486667)
+texture = ExtResource("4_27awe")
+flip_h = true
+flip_v = true
+
+[node name="SFX" type="Node" parent="."]
+
+[node name="Computer" type="AudioStreamPlayer" parent="SFX"]
+unique_name_in_owner = true
+stream = ExtResource("8_213y4")
+volume_db = -20.0
 
 [connection signal="pressed" from="Control/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
 [connection signal="pressed" from="Control/ContinueButton" to="." method="_on_continue_button_pressed"]

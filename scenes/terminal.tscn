@@ -1,7 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://ca1qwxe2wemin"]
+[gd_scene load_steps=12 format=3 uid="uid://ca1qwxe2wemin"]
 
 [ext_resource type="Script" uid="uid://bc4pu2rtu8n1w" path="res://scripts/terminal.gd" id="1_m430i"]
 [ext_resource type="FontFile" uid="uid://cbi6qc2w2chwv" path="res://assets/fonts/Pixellari.ttf" id="2_sy66w"]
+[ext_resource type="AudioStream" uid="uid://655nyyt74vom" path="res://assets/sfx/talk/sig.wav" id="3_vs6ym"]
+[ext_resource type="AudioStream" uid="uid://d0amonk26pq58" path="res://assets/sfx/talk/computer.wav" id="4_dhnb1"]
+[ext_resource type="AudioStream" uid="uid://crf2g8ad7sf20" path="res://assets/sfx/talk/signal.wav" id="5_4vtf0"]
+[ext_resource type="AudioStream" uid="uid://dsg1o642u2taq" path="res://assets/sfx/talk/invalid_input.wav" id="6_2u1pf"]
+[ext_resource type="AudioStream" uid="uid://bned1vswcsy3n" path="res://assets/sfx/talk/valid_input.wav" id="7_g6hjw"]
+[ext_resource type="AudioStream" uid="uid://dgqyq16q0oe7k" path="res://assets/sfx/talk/type.wav" id="8_g6hjw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sy66w"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -85,5 +91,38 @@ unique_name_in_owner = true
 wait_time = 10.0
 autostart = true
 
+[node name="SFX" type="Node" parent="."]
+
+[node name="Sig" type="AudioStreamPlayer" parent="SFX"]
+unique_name_in_owner = true
+stream = ExtResource("3_vs6ym")
+volume_db = -35.0
+
+[node name="Computer" type="AudioStreamPlayer" parent="SFX"]
+unique_name_in_owner = true
+stream = ExtResource("4_dhnb1")
+volume_db = -20.0
+
+[node name="Signal" type="AudioStreamPlayer" parent="SFX"]
+unique_name_in_owner = true
+stream = ExtResource("5_4vtf0")
+volume_db = -25.0
+
+[node name="InvalidInput" type="AudioStreamPlayer" parent="SFX"]
+unique_name_in_owner = true
+stream = ExtResource("6_2u1pf")
+volume_db = -20.0
+
+[node name="ValidInput" type="AudioStreamPlayer" parent="SFX"]
+unique_name_in_owner = true
+stream = ExtResource("7_g6hjw")
+volume_db = -25.0
+
+[node name="Type" type="AudioStreamPlayer" parent="SFX"]
+unique_name_in_owner = true
+stream = ExtResource("8_g6hjw")
+volume_db = -20.0
+
+[connection signal="text_changed" from="PlayerInput" to="." method="_on_player_input_text_changed"]
 [connection signal="text_submitted" from="PlayerInput" to="." method="_on_player_input_text_submitted"]
 [connection signal="timeout" from="MemoryTimer" to="." method="_on_memory_timer_timeout"]

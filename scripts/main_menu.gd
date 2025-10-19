@@ -12,5 +12,6 @@ func _process(delta: float) -> void:
 
 
 func _on_play_button_pressed() -> void:
+	%ValidInput.play()
 	await Fade.fade_out(2.0).finished
 	get_tree().change_scene_to_file("res://scenes/transition_scene.tscn")

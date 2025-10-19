@@ -10,6 +10,7 @@ script = ExtResource("1_aigh2")
 [node name="Type" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("2_vydtp")
+volume_db = -25.0
 pitch_scale = 0.7
 
 [node name="ColorRect" type="ColorRect" parent="."]

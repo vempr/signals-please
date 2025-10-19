@@ -159,7 +159,8 @@ func _on_computer_hover_area_input_event(_viewport: Node, _event: InputEvent, _s
 
 
 func _on_bed_hover_area_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
-	if Input.is_action_just_pressed("click") && GAME_STATE.day_finished == true:
+	if Input.is_action_just_pressed("click"): # && GAME_STATE.day_finished == true:
+		%Sleep.play()
 		progress.emit()
 		process_mode = Node.PROCESS_MODE_DISABLED
 

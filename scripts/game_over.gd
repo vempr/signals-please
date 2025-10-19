@@ -66,11 +66,14 @@ func _process(delta: float) -> void:
 
 
 func _on_replay_button_pressed() -> void:
+	%ValidInput.play()
 	await Fade.fade_out().finished
 	get_tree().change_scene_to_file("res://scenes/transition_scene.tscn")
 
 
 func _on_main_menu_button_pressed() -> void:
+	GAME_STATE.stop_music()
+	%InvalidInput.play()
 	await Fade.fade_out().finished
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 	Fade.fade_in(0.3)
