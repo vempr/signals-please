@@ -2,7 +2,7 @@
 
 is a game made in Godot. Your role is the commander, the sole leader of the last functioning outpost after the network collapse.
 All external contact comes through your Signal Terminal and for every incoming request, you must decide whether or not to trust them.
-Play now:
+Play now: https://vempr.itch.io/signals-please
 
 ## How this game works
 
@@ -14,7 +14,10 @@ You must survive for *ten days*. After that, the N.A.L. ALLIES, the nearest surv
 
 ## Gallery
 
-
+![](https://github.com/vempr/signals-please/blob/d934d92467c9af59a70c0052ad15d0cd560e90a9/readme/week-7-1.jpg)
+![](https://github.com/vempr/signals-please/blob/d934d92467c9af59a70c0052ad15d0cd560e90a9/readme/week-7-2.jpg)
+![](https://github.com/vempr/signals-please/blob/d934d92467c9af59a70c0052ad15d0cd560e90a9/readme/week-7-3.jpg)
+![](https://github.com/vempr/signals-please/blob/d934d92467c9af59a70c0052ad15d0cd560e90a9/readme/week-7-4.jpg)
 
 ## Credits
 

@@ -92,25 +92,25 @@ func _on_window_hover_area_mouse_entered() -> void:
 		
 		match GAME_STATE.day:
 			1:
-				message = "The stars are bright tonight. Maybe they’re watching over us."
+				message = "The stars are bright tonight. Maybe they're watching over us."
 			2:
-				message = "A clear sky. The stars look patient, like they’ve seen worse."
+				message = "A clear sky. The stars look patient, like they've seen worse."
 			3:
-				message = "Cold air, steady light. Feels like the world’s still breathing."
+				message = "Cold air, steady light. Feels like the world's still breathing."
 			4:
 				message = "The stars blink through thin clouds - small signals of calm."
 			5:
 				message = "For a moment, I thought one moved. Maybe a convoy, maybe hope."
 			6:
-				message = "Even through the frost, they shine. Quiet proof we’re not alone."
+				message = "Even through the frost, they shine. Quiet proof we're not alone."
 			7:
-				message = "The night’s clear again. The stars look almost warm tonight."
+				message = "The night's clear again. The stars look almost warm tonight."
 			8:
-				message = "Wind’s calm. The lights above seem closer, like they’re listening."
+				message = "Wind's calm. The lights above seem closer, like they're listening."
 			9:
-				message = "Hard day, but the sky still holds steady. That’s something."
+				message = "Hard day, but the sky still holds steady. That's something."
 			10:
-				message = "The stars linger long tonight - as if they’re waiting for us to endure."
+				message = "The stars linger long tonight - as if' waiting for us to endure."
 
 		if message != "":
 			display_message.emit(message)
@@ -159,7 +159,7 @@ func _on_computer_hover_area_input_event(_viewport: Node, _event: InputEvent, _s
 
 
 func _on_bed_hover_area_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
-	if Input.is_action_just_pressed("click"): # && GAME_STATE.day_finished == true:
+	if Input.is_action_just_pressed("click") && GAME_STATE.day_finished == true:
 		%Sleep.play()
 		progress.emit()
 		process_mode = Node.PROCESS_MODE_DISABLED

@@ -29,6 +29,7 @@ func _ready() -> void:
 	music_player = AudioStreamPlayer.new()
 	add_child(music_player)
 	music_player.stream = load("res://assets/sfx/Dystopian Theme.mp3")
+	music_player.pitch_scale = 0.8
 
 
 func get_reputation_status() -> String:
@@ -64,7 +65,6 @@ func reset() -> void:
 
 func play_music() -> void:
 	music_player.volume_db = -15.0
-	music_player.pitch_scale = 0.8
 	music_player.play()
 
 
