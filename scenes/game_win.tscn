@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://tk5dwj1ileyc"]
+[gd_scene load_steps=9 format=3 uid="uid://tk5dwj1ileyc"]
 
 [ext_resource type="Script" uid="uid://bv58y8kmcn5lq" path="res://scripts/game_win.gd" id="1_7ej5r"]
 [ext_resource type="FontFile" uid="uid://cbi6qc2w2chwv" path="res://assets/fonts/Pixellari.ttf" id="2_oueg3"]
@@ -6,6 +6,8 @@
 [ext_resource type="StyleBox" uid="uid://bc8oxxejsrbsp" path="res://styles/normal_button.tres" id="4_lynnb"]
 [ext_resource type="AudioStream" uid="uid://dsg1o642u2taq" path="res://assets/sfx/talk/invalid_input.wav" id="5_mtd57"]
 [ext_resource type="AudioStream" uid="uid://bned1vswcsy3n" path="res://assets/sfx/talk/valid_input.wav" id="6_lynnb"]
+[ext_resource type="AudioStream" uid="uid://655nyyt74vom" path="res://assets/sfx/talk/sig.wav" id="7_3tf7q"]
+[ext_resource type="FontFile" uid="uid://bar55wglxrc3e" path="res://assets/fonts/Pixeled.ttf" id="7_lynnb"]
 
 [node name="GameWin" type="Node2D"]
 script = ExtResource("1_7ej5r")
@@ -119,6 +121,40 @@ volume_db = -20.0
 unique_name_in_owner = true
 stream = ExtResource("6_lynnb")
 volume_db = -25.0
+
+[node name="Sig" type="AudioStreamPlayer" parent="SFX"]
+unique_name_in_owner = true
+stream = ExtResource("7_3tf7q")
+volume_db = -35.0
+
+[node name="FinalState" type="Label" parent="."]
+unique_name_in_owner = true
+visible = false
+z_index = -9
+offset_left = 121.0
+offset_top = 855.0
+offset_right = 896.0
+offset_bottom = 988.0
+theme_override_colors/font_color = Color(0.1333, 0.43, 0.17286, 1)
+theme_override_fonts/font = ExtResource("2_oueg3")
+theme_override_font_sizes/font_size = 30
+text = "ENDING: PLAYER LOST ON DAY 1 WITH 99% HUNGER AND 20% REPUTATION. THERE WERE 1.0 DAYS OF RATION AND 14 PEOPLE REMAINING.
+"
+horizontal_alignment = 2
+autowrap_mode = 2
+
+[node name="Title" type="Label" parent="."]
+unique_name_in_owner = true
+visible = false
+z_index = -9
+offset_left = 79.0
+offset_top = 19.0
+offset_right = 897.0
+offset_bottom = 205.0
+theme_override_colors/font_color = Color(0.133333, 0.431373, 0.172549, 1)
+theme_override_fonts/font = ExtResource("7_lynnb")
+theme_override_font_sizes/font_size = 66
+text = "Signals, Please!"
 
 [connection signal="pressed" from="Buttons/ReplayButton" to="." method="_on_replay_button_pressed"]
 [connection signal="pressed" from="Buttons/MainMenuButton" to="." method="_on_main_menu_button_pressed"]

@@ -6,7 +6,7 @@ extends Node
 # ((called JUMPED cuz I couldn't think of a better name xd))
 enum DEATH_REASON { HUNGER, REPUTATION, ISOLATION, JUMPED }
 
-var INITIAL_HUNGER := 99 # randi_range(1, 10) + 20
+var INITIAL_HUNGER := randi_range(1, 10) + 20
 var INITIAL_REPUTATION := randi_range(1, 10) + 40
 var INITIAL_RATION_REMAINING: float = snapped(randi_range(5, 6) + randf(), 0.1)
 const INITIAL_PEOPLE_REMAINING := 15

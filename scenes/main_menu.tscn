@@ -45,14 +45,14 @@ autowrap_mode = 2
 
 [node name="Description2" type="Label" parent="."]
 z_index = -2
-offset_left = 963.0
-offset_top = 964.0
-offset_right = 2149.0
-offset_bottom = 2578.0
+offset_left = 996.0
+offset_top = 953.0
+offset_right = 2182.0
+offset_bottom = 2567.0
 theme_override_colors/font_color = Color(1, 1, 1, 0.156863)
 theme_override_fonts/font = ExtResource("4_wu84c")
-theme_override_font_sizes/font_size = 103
-text = "(Tip: you can pause)"
+theme_override_font_sizes/font_size = 92
+text = "(TIP: You can pause.)"
 autowrap_mode = 2
 
 [node name="PlayButton" type="Button" parent="."]

@@ -17,6 +17,7 @@ universal_fade/patterns_directory="res://addons/UniversalFade/Patterns"
 config/name="signals-please"
 run/main_scene="uid://dv5o0yn2j6xht"
 config/features=PackedStringArray("4.4", "GL Compatibility")
+boot_splash/image="uid://c7x3teb6do8wg"
 config/icon="res://icon.svg"
 
 [audio]

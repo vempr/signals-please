@@ -11,15 +11,28 @@ const sig_text := "> SIG: Good morning, commander. Ready for another day?"
 func _ready() -> void:
 	%Message.modulate.a = 0.0
 	%Message.visible = true
+	%FinalState.modulate.a = 0.0
+	%FinalState.visible = true
+	%Title.modulate.a = 0.0
+	%Title.visible = true
+	
+	var ending_text := "< ENDING: PLAYER WON ON DAY " + str(GAME_STATE.day)
+	ending_text += " WITH " + str(GAME_STATE.player.hunger) + "% HUNGER"
+	ending_text += " AND " + str(GAME_STATE.player.reputation) + "% REPUTATION."
+	ending_text += " THERE WERE " + str(GAME_STATE.ration_remaining) + " DAYS OF RATION"
+	ending_text += " AND " + str(GAME_STATE.people_remaining) + " PEOPLE REMAINING. >"
+	%FinalState.text = ending_text
 	
 	label.text = ""
 	for letter in sig_text:
+		%Sig.stop()
+		%Sig.play()
 		label.text += letter
 		
 		if letter == ".":
 			timer.start(1.0)
-		elif [",", "-", ";"].find(letter) > -1:
-			timer.start(0.2)
+		elif [",", "-", ";", "?"].find(letter) > -1:
+			timer.start(0.4)
 		else:
 			timer.start(0.1)
 		await timer.timeout
@@ -34,7 +47,9 @@ func _ready() -> void:
 	var button_tween = create_tween()
 	%Buttons.modulate.a = 0.0
 	%Buttons.visible = true
-	button_tween.tween_property(%Buttons, "modulate:a", 1.0, 2.0)
+	button_tween.parallel().tween_property(%Buttons, "modulate:a", 1.0, 2.0)
+	button_tween.parallel().tween_property(%FinalState, "modulate:a", 1.0, 2.0)
+	button_tween.parallel().tween_property(%Title, "modulate:a", 1.0, 2.0)
 	
 	GAME_STATE.reset()
 
